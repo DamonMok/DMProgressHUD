@@ -1,6 +1,6 @@
 //
-//  DMProcessDemoTests.m
-//  DMProcessDemoTests
+//  DMProgressViewDemoTests.m
+//  DMProgressViewDemoTests
 //
 //  Created by Damon on 2017/9/1.
 //  Copyright © 2017年 damon. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface DMProcessDemoTests : XCTestCase
+@interface DMProgressViewDemoTests : XCTestCase
 
 @end
 
-@implementation DMProcessDemoTests
+@implementation DMProgressViewDemoTests
 
 - (void)setUp {
     [super setUp];

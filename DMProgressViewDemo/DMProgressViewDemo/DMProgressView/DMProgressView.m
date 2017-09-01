@@ -1,16 +1,16 @@
 //
-//  DMProcessView.m
-//  DMProcessDemo
+//  DMProgressView.m
+//  DMProgressViewDemo
 //
 //  Created by Damon on 2017/9/1.
 //  Copyright © 2017年 damon. All rights reserved.
 //
 
-#import "DMProcessView.h"
+#import "DMProgressView.h"
 
-@interface DMProcessView ()
+@interface DMProgressView ()
 
-@property (nonatomic, strong)DMProcessView *processView;
+@property (nonatomic, strong)DMProgressView *progressView;
 
 @property (nonatomic, strong)CAShapeLayer *processLayer;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation DMProcessView
+@implementation DMProgressView
 
 - (CAShapeLayer *)processLayer {
     
@@ -74,21 +74,22 @@
 
 + (instancetype)showAddedTo:(UIView *)view {
     
-    DMProcessView *processView = [[DMProcessView alloc] init];
-    processView.processView = processView;
-    processView.backgroundColor = [UIColor clearColor];
+    DMProgressView *progressView = [[DMProgressView alloc] init];
+    progressView.progressView = progressView;
+    progressView.backgroundColor = [UIColor clearColor];
     
-    processView.frame = CGRectMake(0, 0, 40, 40);
-    processView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
+    progressView.frame = CGRectMake(0, 0, 40, 40);
+    progressView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
     
-    [view addSubview:processView];
+    [view addSubview:progressView];
     
-    return processView;
+    return progressView;
 }
 
 - (void)hide {
     
-    [self.processView removeFromSuperview];
+    [self.progressView removeFromSuperview];
 }
+
 
 @end

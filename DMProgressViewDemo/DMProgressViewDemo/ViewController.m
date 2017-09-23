@@ -14,7 +14,7 @@
     int _index;
 }
 
-@property (nonatomic, strong)DMProgressView *progressView;
+@property (nonatomic, weak)DMProgressView *progressView;
 
 @property (nonatomic, strong)NSArray *array;
 

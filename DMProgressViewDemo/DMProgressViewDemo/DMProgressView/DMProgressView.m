@@ -10,7 +10,7 @@
 
 @interface DMProgressView ()
 
-@property (nonatomic, strong)DMProgressView *hubView;
+@property (nonatomic, weak)DMProgressView *hubView;
 
 //进度圈View
 @property (nonatomic, strong)CAShapeLayer *processLayer;
@@ -78,7 +78,8 @@
 }
 
 #pragma mark - 进度View
-+ (instancetype)showAddedTo:(UIView *)view {
+/*【显示】进度View*/
++ (instancetype)showProgressViewAddedTo:(UIView *)view {
     
     for (UIView *progressView in view.subviews) {
         
@@ -100,12 +101,14 @@
     return progressView;
 }
 
-- (void)hide {
+/*【隐藏】进度View*/
+- (void)hideProgressView {
     
     [self.hubView removeFromSuperview];
 }
 
 #pragma mark - 加载View
+/*【显示】loadingView*/
 + (instancetype)showLoadingViewAddTo:(UIView *)view {
 
     for (UIView *loadingView in view.subviews) {
@@ -151,6 +154,7 @@
     return progressView;
 }
 
+/*【隐藏】loadingView*/
 - (void)hideLoadingView {
 
     [self.hubView removeFromSuperview];

@@ -100,7 +100,7 @@
 #pragma mark 进度圈
 - (void)showProgressView {
     
-    DMProgressView *progressView = [DMProgressView showAddedTo:self.view];
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
 
     NSArray *arrProcess = @[@0.2, @0.4, @0.6, @0.8, @1.0];
     
@@ -114,7 +114,7 @@
         } else {
         
             [timer invalidate];
-            [progressView hide];
+            [progressView hideProgressView];
         }
     }];
 }

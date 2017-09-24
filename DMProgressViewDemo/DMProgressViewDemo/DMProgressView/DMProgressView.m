@@ -14,7 +14,7 @@
 
 //进度圈View
 @property (nonatomic, strong)CAShapeLayer *processLayer;
-@property (nonatomic, strong)UILabel *processLabel;
+@property (nonatomic, strong)UILabel *labProcess;
 
 //加载中loadingView
 @property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
@@ -39,19 +39,19 @@
     return _processLayer;
 }
 
-- (UILabel *)processLabel {
+- (UILabel *)labProcess {
     
-    if (!_processLabel) {
+    if (!_labProcess) {
         
-        _processLabel = [[UILabel alloc] init];
-        _processLabel.textColor = [UIColor whiteColor];
-        _processLabel.textAlignment = NSTextAlignmentCenter;
-        [_processLabel sizeToFit];
+        _labProcess = [[UILabel alloc] init];
+        _labProcess.textColor = [UIColor whiteColor];
+        _labProcess.textAlignment = NSTextAlignmentCenter;
+        [_labProcess sizeToFit];
         
-        [self.layer addSublayer:_processLabel.layer];
+        [self.layer addSublayer:_labProcess.layer];
     }
     
-    return _processLabel;
+    return _labProcess;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -62,10 +62,10 @@
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*self.process clockwise:YES];
     self.processLayer.path = [path CGPath];
     
-    self.processLabel.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
-    self.processLabel.center = center;
-    self.processLabel.text = [NSString stringWithFormat:@"%.0f", self.process*100];
-    self.processLabel.hidden = self.process>0?NO:YES;
+    self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
+    self.labProcess.center = center;
+    self.labProcess.text = [NSString stringWithFormat:@"%.0f", self.process*100];
+    self.labProcess.hidden = self.process>0?NO:YES;
     
 }
 
@@ -104,6 +104,7 @@
 - (void)hideProgressView {
     
     [self.hubView removeFromSuperview];
+
 }
 
 #pragma mark - 加载View
@@ -162,5 +163,9 @@
     [self.labLoading removeFromSuperview];
 }
 
+- (void)dealloc {
+
+    NSLog(@"%s", __func__);
+}
 
 @end

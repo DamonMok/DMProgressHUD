@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E4F057EE1F781B1B00E986BA /* DMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F057ED1F781B1B00E986BA /* DMProgressView.m */; };
 		E4F7E62A1F592D910025BF84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E6291F592D910025BF84 /* main.m */; };
 		E4F7E62D1F592D910025BF84 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E62C1F592D910025BF84 /* AppDelegate.m */; };
 		E4F7E6301F592D910025BF84 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E62F1F592D910025BF84 /* ViewController.m */; };
@@ -15,7 +16,6 @@
 		E4F7E6381F592D910025BF84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4F7E6361F592D910025BF84 /* LaunchScreen.storyboard */; };
 		E4F7E6431F592D910025BF84 /* DMProgressViewDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E6421F592D910025BF84 /* DMProgressViewDemoTests.m */; };
 		E4F7E64E1F592D910025BF84 /* DMProgressViewDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E64D1F592D910025BF84 /* DMProgressViewDemoUITests.m */; };
-		E4F7E65F1F592E030025BF84 /* DMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E65E1F592E030025BF84 /* DMProgressView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E4F057EC1F781B1B00E986BA /* DMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMProgressView.h; sourceTree = "<group>"; };
+		E4F057ED1F781B1B00E986BA /* DMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMProgressView.m; sourceTree = "<group>"; };
 		E4F7E6251F592D910025BF84 /* DMProgressViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMProgressViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F7E6291F592D910025BF84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E4F7E62B1F592D910025BF84 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -52,8 +54,6 @@
 		E4F7E6491F592D910025BF84 /* DMProgressViewDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DMProgressViewDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F7E64D1F592D910025BF84 /* DMProgressViewDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMProgressViewDemoUITests.m; sourceTree = "<group>"; };
 		E4F7E64F1F592D910025BF84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E4F7E65D1F592E030025BF84 /* DMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMProgressView.h; sourceTree = "<group>"; };
-		E4F7E65E1F592E030025BF84 /* DMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMProgressView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +147,8 @@
 		E4F7E65C1F592DE30025BF84 /* DMProgressView */ = {
 			isa = PBXGroup;
 			children = (
-				E4F7E65D1F592E030025BF84 /* DMProgressView.h */,
-				E4F7E65E1F592E030025BF84 /* DMProgressView.m */,
+				E4F057EC1F781B1B00E986BA /* DMProgressView.h */,
+				E4F057ED1F781B1B00E986BA /* DMProgressView.m */,
 			);
 			path = DMProgressView;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4F7E65F1F592E030025BF84 /* DMProgressView.m in Sources */,
+				E4F057EE1F781B1B00E986BA /* DMProgressView.m in Sources */,
 				E4F7E6301F592D910025BF84 /* ViewController.m in Sources */,
 				E4F7E62D1F592D910025BF84 /* AppDelegate.m in Sources */,
 				E4F7E62A1F592D910025BF84 /* main.m in Sources */,
@@ -524,6 +524,7 @@
 				E4F7E6541F592D910025BF84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4F7E6551F592D910025BF84 /* Build configuration list for PBXNativeTarget "DMProgressViewDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +533,7 @@
 				E4F7E6571F592D910025BF84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4F7E6581F592D910025BF84 /* Build configuration list for PBXNativeTarget "DMProgressViewDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -540,6 +542,7 @@
 				E4F7E65A1F592D910025BF84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

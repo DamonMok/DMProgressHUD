@@ -13,10 +13,17 @@
 //process
 @property (nonatomic, assign)CGFloat process;
 
+/*进度*/
 //show
 + (instancetype)showAddedTo:(UIView *)view;
 
 //hide
 - (void)hide;
+
+/*【显示】loadingView*/
++ (instancetype)showLoadingViewAddTo:(UIView *)view;
+
+/*【隐藏】loadingView*/
+- (void)hideLoadingView;
 
 @end

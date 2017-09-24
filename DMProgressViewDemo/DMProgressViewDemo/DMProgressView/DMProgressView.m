@@ -10,11 +10,16 @@
 
 @interface DMProgressView ()
 
-@property (nonatomic, strong)DMProgressView *progressView;
+@property (nonatomic, strong)DMProgressView *hubView;
 
+//进度圈View
 @property (nonatomic, strong)CAShapeLayer *processLayer;
-
 @property (nonatomic, strong)UILabel *processLabel;
+
+//loadingView
+@property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
+@property (nonatomic, strong)UILabel *labLoading;
+
 
 @end
 
@@ -72,10 +77,19 @@
     [self setNeedsDisplay];
 }
 
+#pragma mark - 进度View
 + (instancetype)showAddedTo:(UIView *)view {
     
+    for (UIView *progressView in view.subviews) {
+        
+        if ([progressView isKindOfClass:[DMProgressView class]]) {
+            
+            return nil;
+        }
+    }
+    
     DMProgressView *progressView = [[DMProgressView alloc] init];
-    progressView.progressView = progressView;
+    progressView.hubView = progressView;
     progressView.backgroundColor = [UIColor clearColor];
     
     progressView.frame = CGRectMake(0, 0, 40, 40);
@@ -88,7 +102,60 @@
 
 - (void)hide {
     
-    [self.progressView removeFromSuperview];
+    [self.hubView removeFromSuperview];
+}
+
+#pragma mark - 加载View
++ (instancetype)showLoadingViewAddTo:(UIView *)view {
+
+    for (UIView *loadingView in view.subviews) {
+        
+        if ([loadingView isKindOfClass:[DMProgressView class]]) {
+            
+            return nil;
+        }
+    }
+    
+    DMProgressView *progressView = [[DMProgressView alloc] init];
+    progressView.hubView = progressView;
+    progressView.backgroundColor = [UIColor grayColor];
+    progressView.layer.masksToBounds = YES;
+    progressView.layer.cornerRadius = 5;
+    progressView.alpha = 0.7;
+    progressView.frame = CGRectMake(0, 0, 100, 100);
+    progressView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
+    
+    //加载圈
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectZero];
+    progressView.activityIndicatorView = activityIndicatorView;
+    activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    activityIndicatorView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5-15);
+    
+    [activityIndicatorView startAnimating];
+    
+    //文字
+    UILabel *labLoading = [[UILabel alloc] init];
+    progressView.labLoading = labLoading;
+    labLoading.text = @"正在加载...";
+    labLoading.font = [UIFont systemFontOfSize:14.0];
+    labLoading.textColor = [UIColor whiteColor];
+    labLoading.textAlignment = NSTextAlignmentCenter;
+    [labLoading sizeToFit];
+    labLoading.frame = CGRectMake(0, 0, progressView.bounds.size.width, 30);
+    labLoading.center = CGPointMake(view.bounds.size.width*0.5, view.center.y+30);
+    
+    [view addSubview:progressView];
+    [view addSubview:activityIndicatorView];
+    [view addSubview:labLoading];
+    
+    return progressView;
+}
+
+- (void)hideLoadingView {
+
+    [self.hubView removeFromSuperview];
+    [self.activityIndicatorView removeFromSuperview];
+    [self.labLoading removeFromSuperview];
 }
 
 

@@ -13,14 +13,14 @@
 //process
 @property (nonatomic, assign)CGFloat process;
 
-/*******************进度********************/
+//---------------------进度---------------------
 //【显示】进度View
 + (instancetype)showProgressViewAddedTo:(UIView *)view;
 
 //【隐藏】进度View
 - (void)hideProgressView;
 
-/*******************加载中********************/
+//---------------------加载中---------------------
 //【显示】loadingView
 + (instancetype)showLoadingViewAddTo:(UIView *)view;
 

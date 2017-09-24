@@ -16,10 +16,9 @@
 @property (nonatomic, strong)CAShapeLayer *processLayer;
 @property (nonatomic, strong)UILabel *processLabel;
 
-//loadingView
+//加载中loadingView
 @property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, strong)UILabel *labLoading;
-
 
 @end
 
@@ -78,7 +77,7 @@
 }
 
 #pragma mark - 进度View
-/*【显示】进度View*/
+/**【显示】进度View*/
 + (instancetype)showProgressViewAddedTo:(UIView *)view {
     
     for (UIView *progressView in view.subviews) {
@@ -101,14 +100,14 @@
     return progressView;
 }
 
-/*【隐藏】进度View*/
+/**【隐藏】进度View*/
 - (void)hideProgressView {
     
     [self.hubView removeFromSuperview];
 }
 
 #pragma mark - 加载View
-/*【显示】loadingView*/
+/**【显示】loadingView*/
 + (instancetype)showLoadingViewAddTo:(UIView *)view {
 
     for (UIView *loadingView in view.subviews) {
@@ -154,7 +153,8 @@
     return progressView;
 }
 
-/*【隐藏】loadingView*/
+
+/**【隐藏】loadingView*/
 - (void)hideLoadingView {
 
     [self.hubView removeFromSuperview];

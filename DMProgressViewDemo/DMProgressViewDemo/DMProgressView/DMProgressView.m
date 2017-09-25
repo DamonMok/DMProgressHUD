@@ -65,6 +65,7 @@
     self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
     self.labProcess.center = center;
     self.labProcess.text = [NSString stringWithFormat:@"%.0f", self.process*100];
+    
     self.labProcess.hidden = self.process>0?NO:YES;
     
 }
@@ -73,7 +74,11 @@
     
     _process = process;
     
+    //2%预显示
+    _process = _process > 0.02 ? _process : 0.02;
+    
     [self setNeedsDisplay];
+    
 }
 
 #pragma mark - 进度View
@@ -103,6 +108,7 @@
 /**【隐藏】进度View*/
 - (void)hideProgressView {
     
+    [self.labProcess.layer removeFromSuperlayer];
     [self.hubView removeFromSuperview];
 
 }

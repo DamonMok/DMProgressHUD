@@ -102,7 +102,7 @@
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
 
-    NSArray *arrProcess = @[@0.2, @0.4, @0.6, @0.8, @1.0];
+    NSArray *arrProcess = @[@0, @0.2, @0.4, @0.6, @0.8, @1.0];
     
     __block int i = 0;
     [NSTimer scheduledTimerWithTimeInterval:0.25 repeats:YES block:^(NSTimer * _Nonnull timer) {

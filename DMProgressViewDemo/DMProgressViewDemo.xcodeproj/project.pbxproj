@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E4F057EE1F781B1B00E986BA /* DMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F057ED1F781B1B00E986BA /* DMProgressView.m */; };
+		E429075F1F78A9E100A863E7 /* DMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E429075E1F78A9E100A863E7 /* DMProgressView.m */; };
 		E4F7E62A1F592D910025BF84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E6291F592D910025BF84 /* main.m */; };
 		E4F7E62D1F592D910025BF84 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E62C1F592D910025BF84 /* AppDelegate.m */; };
 		E4F7E6301F592D910025BF84 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E62F1F592D910025BF84 /* ViewController.m */; };
@@ -36,8 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E4F057EC1F781B1B00E986BA /* DMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMProgressView.h; sourceTree = "<group>"; };
-		E4F057ED1F781B1B00E986BA /* DMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMProgressView.m; sourceTree = "<group>"; };
+		E429075D1F78A9E100A863E7 /* DMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMProgressView.h; sourceTree = "<group>"; };
+		E429075E1F78A9E100A863E7 /* DMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMProgressView.m; sourceTree = "<group>"; };
 		E4F7E6251F592D910025BF84 /* DMProgressViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMProgressViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F7E6291F592D910025BF84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E4F7E62B1F592D910025BF84 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -147,8 +147,8 @@
 		E4F7E65C1F592DE30025BF84 /* DMProgressView */ = {
 			isa = PBXGroup;
 			children = (
-				E4F057EC1F781B1B00E986BA /* DMProgressView.h */,
-				E4F057ED1F781B1B00E986BA /* DMProgressView.m */,
+				E429075D1F78A9E100A863E7 /* DMProgressView.h */,
+				E429075E1F78A9E100A863E7 /* DMProgressView.m */,
 			);
 			path = DMProgressView;
 			sourceTree = "<group>";
@@ -287,7 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4F057EE1F781B1B00E986BA /* DMProgressView.m in Sources */,
+				E429075F1F78A9E100A863E7 /* DMProgressView.m in Sources */,
 				E4F7E6301F592D910025BF84 /* ViewController.m in Sources */,
 				E4F7E62D1F592D910025BF84 /* AppDelegate.m in Sources */,
 				E4F7E62A1F592D910025BF84 /* main.m in Sources */,

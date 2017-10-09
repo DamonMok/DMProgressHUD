@@ -10,8 +10,6 @@
 
 @interface DMProgressView ()
 
-@property (nonatomic, weak)DMProgressView *hubView;
-
 //进度圈View
 @property (nonatomic, strong)CAShapeLayer *processLayer;
 @property (nonatomic, strong)UILabel *labProcess;
@@ -93,8 +91,7 @@
         }
     }
     
-    DMProgressView *progressView = [[DMProgressView alloc] init];
-    progressView.hubView = progressView;
+    DMProgressView *progressView = [[self alloc] init];
     progressView.backgroundColor = [UIColor clearColor];
     
     progressView.frame = CGRectMake(0, 0, 40, 40);
@@ -109,7 +106,7 @@
 - (void)hideProgressView {
     
     [self.labProcess.layer removeFromSuperlayer];
-    [self.hubView removeFromSuperview];
+    [self removeFromSuperview];
 
 }
 
@@ -126,7 +123,6 @@
     }
     
     DMProgressView *progressView = [[DMProgressView alloc] init];
-    progressView.hubView = progressView;
     progressView.backgroundColor = [UIColor grayColor];
     progressView.layer.masksToBounds = YES;
     progressView.layer.cornerRadius = 5;
@@ -164,7 +160,7 @@
 /**【隐藏】loadingView*/
 - (void)hideLoadingView {
 
-    [self.hubView removeFromSuperview];
+    [self removeFromSuperview];
     [self.activityIndicatorView removeFromSuperview];
     [self.labLoading removeFromSuperview];
 }

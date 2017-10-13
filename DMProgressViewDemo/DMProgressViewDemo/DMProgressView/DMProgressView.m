@@ -83,11 +83,12 @@
 /**【显示】进度View*/
 + (instancetype)showProgressViewAddedTo:(UIView *)view {
     
-    for (UIView *progressView in view.subviews) {
+    for (DMProgressView *progressView in view.subviews) {
         
         if ([progressView isKindOfClass:[DMProgressView class]]) {
             
-            return nil;
+            //[progressView removeFromSuperview];
+            return progressView;
         }
     }
     

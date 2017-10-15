@@ -181,6 +181,7 @@
     progressView.layer.cornerRadius = 5;
     progressView.frame = CGRectMake(0, 0, 100, 100);
     progressView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
+    progressView.alpha = 0;
     
     //成功图标
     UIImageView *ivSuccess = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProgressSuccess"]];
@@ -200,15 +201,17 @@
     
     [progressView addSubview:ivSuccess];
     [progressView addSubview:labLoading];
+    [view addSubview:progressView];
     
-    [UIView transitionWithView:view duration:0.3 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve animations:^{
+    [UIView animateKeyframesWithDuration:0.3 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
         
-        [view addSubview:progressView];
+        progressView.alpha = 1;
+        
     } completion:^(BOOL finished) {
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //防止和主运行循环进行资源竞争导致的卡顿
-            [progressView performSelector:@selector(hideSuccessWithView:) withObject:view afterDelay:0 inModes:@[NSDefaultRunLoopMode]];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [progressView hideSuccessWithView:view];
         });
     }];
     
@@ -218,11 +221,13 @@
 //【隐藏】成功提示
 - (void)hideSuccessWithView:(UIView *)view {
     
-    [UIView transitionWithView:view duration:0.3 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve animations:^{
+    [UIView animateKeyframesWithDuration:0.3 delay:0 options:UIViewKeyframeAnimationOptionAllowUserInteraction animations:^{
+        
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
         
         [self removeFromSuperview];
-        
-    } completion:nil];
+    }];
 }
 
 - (void)dealloc {

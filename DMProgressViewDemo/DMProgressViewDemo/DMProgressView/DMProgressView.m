@@ -115,19 +115,19 @@
 /**【显示】loadingView*/
 + (instancetype)showLoadingViewAddTo:(UIView *)view {
 
-    for (UIView *loadingView in view.subviews) {
+    for (DMProgressView *loadingView in view.subviews) {
         
         if ([loadingView isKindOfClass:[DMProgressView class]]) {
             
-            return nil;
+            return loadingView;
         }
     }
     
     DMProgressView *progressView = [[DMProgressView alloc] init];
-    progressView.backgroundColor = [UIColor grayColor];
+    progressView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6];
     progressView.layer.masksToBounds = YES;
     progressView.layer.cornerRadius = 5;
-    progressView.alpha = 0.7;
+//    progressView.alpha = 0.7;
     progressView.frame = CGRectMake(0, 0, 100, 100);
     progressView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5);
     
@@ -135,7 +135,7 @@
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectZero];
     progressView.activityIndicatorView = activityIndicatorView;
     activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    activityIndicatorView.center = CGPointMake(view.bounds.size.width*0.5, view.bounds.size.height*0.5-15);
+    activityIndicatorView.center = CGPointMake(progressView.bounds.size.width*0.5, progressView.bounds.size.height*0.5-15);
     
     [activityIndicatorView startAnimating];
     
@@ -148,11 +148,11 @@
     labLoading.textAlignment = NSTextAlignmentCenter;
     [labLoading sizeToFit];
     labLoading.frame = CGRectMake(0, 0, progressView.bounds.size.width, 30);
-    labLoading.center = CGPointMake(view.bounds.size.width*0.5, view.center.y+30);
+    labLoading.center = CGPointMake(progressView.bounds.size.width*0.5, progressView.bounds.size.height*0.5+30);
     
     [view addSubview:progressView];
-    [view addSubview:activityIndicatorView];
-    [view addSubview:labLoading];
+    [progressView addSubview:activityIndicatorView];
+    [progressView addSubview:labLoading];
     
     return progressView;
 }
@@ -162,8 +162,6 @@
 - (void)hideLoadingView {
 
     [self removeFromSuperview];
-    [self.activityIndicatorView removeFromSuperview];
-    [self.labLoading removeFromSuperview];
 }
 
 - (void)dealloc {

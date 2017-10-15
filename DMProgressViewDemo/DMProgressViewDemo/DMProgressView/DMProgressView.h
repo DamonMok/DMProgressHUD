@@ -27,4 +27,7 @@
 //【隐藏】loadingView
 - (void)hideLoadingView;
 
++ (instancetype)showSuccessAddedTo:(UIView *)view;
+
+
 @end

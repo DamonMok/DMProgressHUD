@@ -80,7 +80,7 @@
 }
 
 #pragma mark - 进度View
-/**【显示】进度View*/
+//【显示】进度View
 + (instancetype)showProgressViewAddedTo:(UIView *)view {
     
     for (DMProgressView *progressView in view.subviews) {
@@ -103,7 +103,7 @@
     return progressView;
 }
 
-/**【隐藏】进度View*/
+//【隐藏】进度View
 - (void)hideProgressView {
     
     [self.labProcess.layer removeFromSuperlayer];
@@ -112,7 +112,7 @@
 }
 
 #pragma mark - 加载View
-/**【显示】loadingView*/
+//【显示】loadingView
 + (instancetype)showLoadingViewAddTo:(UIView *)view {
 
     for (DMProgressView *loadingView in view.subviews) {
@@ -157,14 +157,15 @@
 }
 
 
-/**【隐藏】loadingView*/
+//【隐藏】loadingView
 - (void)hideLoadingView {
 
     [self removeFromSuperview];
 }
 
-
-+ (instancetype)showSuccessAddedTo:(UIView *)view {
+#pragma mark - 成功提示View
+//【显示
++ (instancetype)showSuccessAddedTo:(UIView *)view message:(NSString *)message {
 
     for (DMProgressView *loadingView in view.subviews) {
         
@@ -189,7 +190,7 @@
     //文字
     UILabel *labLoading = [[UILabel alloc] init];
     progressView.labLoading = labLoading;
-    labLoading.text = @"保存成功";
+    labLoading.text = message;
     labLoading.font = [UIFont systemFontOfSize:14.0];
     labLoading.textColor = [UIColor whiteColor];
     labLoading.textAlignment = NSTextAlignmentCenter;
@@ -206,16 +207,22 @@
     } completion:^(BOOL finished) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
-            [UIView transitionWithView:view duration:0.3 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                
-                [progressView removeFromSuperview];
-                
-            } completion:nil];
+            //防止和主运行循环进行资源竞争导致的卡顿
+            [progressView performSelector:@selector(hideSuccessWithView:) withObject:view afterDelay:0 inModes:@[NSDefaultRunLoopMode]];
         });
     }];
     
     return progressView;
+}
+
+//【隐藏】成功提示
+- (void)hideSuccessWithView:(UIView *)view {
+    
+    [UIView transitionWithView:view duration:0.3 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        
+        [self removeFromSuperview];
+        
+    } completion:nil];
 }
 
 - (void)dealloc {

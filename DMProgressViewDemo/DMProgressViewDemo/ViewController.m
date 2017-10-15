@@ -135,7 +135,7 @@
 #pragma mark 成功提示
 - (void)showSuccessView {
     
-    DMProgressView *progressView = [DMProgressView showSuccessAddedTo:self.view];
+    [DMProgressView showSuccessAddedTo:self.view message:@"保存成功"];
     
 }
 

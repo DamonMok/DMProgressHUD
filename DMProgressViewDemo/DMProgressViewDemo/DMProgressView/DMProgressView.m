@@ -291,10 +291,10 @@
     //Text label
     self.label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
-    self.label.text = @"Loading Loading";
+    self.label.text = @"Loading...";
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
-    [_vBackground addSubview:self.label];
+    self.label.textAlignment = NSTextAlignmentCenter;
     
     //UIActivityIndicatorView
     _indicator = [[UIActivityIndicatorView alloc] init];
@@ -307,8 +307,7 @@
 
     //background view
     NSMutableArray *bgConstraints = [NSMutableArray new];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    
     [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-_margin]];
     [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-_margin]];
     [self addConstraints:bgConstraints];
@@ -317,13 +316,19 @@
         
         NSLog(@"DMProgressViewModeLoading");
         [_vBackground addSubview:_customView];
-        //[_customView addSubview:_indicator];
+        [_vBackground addSubview:_label];
         
         NSMutableArray *cusViewConstraints = [NSMutableArray new];
-        [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_vBackground attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
         [self configConstraints:cusViewConstraints forSubView:_customView minimumWidth:22 minimumHeight:22];
-        [self updateBgViewWithTopView:_customView bottomView:_customView widthView:_customView];
-        [_vBackground addConstraints:cusViewConstraints];
+        [self addConstraints:cusViewConstraints];
+        
+        NSMutableArray *labConstraints = [NSMutableArray new];
+        [self configConstraints:labConstraints forSubView:_label minimumWidth:60 minimumHeight:0];
+        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTopMargin relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:_margin]];
+        [self addConstraints:labConstraints];
+        
+        [self updateBgViewWithTopView:_customView bottomView:_label widthView:_label];
+        
         
         
     } else if (_mode == DMProgressViewModeProgress) {
@@ -336,11 +341,11 @@
     
     } else if (_mode == DMProgressViewModeText) {
     
-        [_customView removeFromSuperview];
-        [_vBackground addSubview:_label];
         //label
+        [_vBackground addSubview:_label];
+        
         NSMutableArray *labConstraints = [NSMutableArray new];
-        [labConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_vBackground attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self configConstraints:labConstraints forSubView:_label minimumWidth:30 minimumHeight:0];
         [self updateBgViewWithTopView:_label bottomView:_label widthView:_label];
         [_vBackground addConstraints:labConstraints];
     }
@@ -377,7 +382,11 @@
 
 
 - (void)configConstraints:(NSMutableArray *)constraints forSubView:(UIView *)subView minimumWidth:(CGFloat)width minimumHeight:(CGFloat)height {
-
+    
+    //子视图水平居中
+    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    
+    //子视图最大/最小 宽高
     [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeWidth multiplier:1 constant:-padding]];
     [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeHeight multiplier:1 constant:-padding]];
     [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:width]];
@@ -386,9 +395,15 @@
 
 - (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView widthView:(UIView *)widthView {
 
+    //根据子视图自适应父视图
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:padding]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeWidth multiplier:1 constant:2*padding]];
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-padding]];
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeRight multiplier:1 constant:padding]];
+    
+    //内容居中、宽高边距限制
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    
 }
 
 

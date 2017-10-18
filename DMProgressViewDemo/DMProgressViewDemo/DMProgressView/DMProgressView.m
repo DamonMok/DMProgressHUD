@@ -8,6 +8,8 @@
 
 #import "DMProgressView.h"
 
+#define padding 20
+
 @interface DMProgressView ()
 
 //进度圈View
@@ -17,6 +19,11 @@
 //加载中loadingView
 @property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, strong)UILabel *labLoading;
+
+#warning recode
+@property (nonatomic, strong) UIView *vBackground;
+
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @end
 
@@ -81,7 +88,7 @@
 
 #pragma mark - 进度View
 //【显示】进度View
-+ (instancetype)showProgressViewAddedTo:(UIView *)view {
++ (instancetype)showProgressViewAddedTo1:(UIView *)view {
     
     for (DMProgressView *progressView in view.subviews) {
         
@@ -113,7 +120,7 @@
 
 #pragma mark - 加载View
 //【显示】loadingView
-+ (instancetype)showLoadingViewAddTo:(UIView *)view {
++ (instancetype)showLoadingViewAddTo1:(UIView *)view {
 
     for (DMProgressView *loadingView in view.subviews) {
         
@@ -229,6 +236,167 @@
         [self removeFromSuperview];
     }];
 }
+
+#warning recode
++ (instancetype)showProgressViewAddedTo:(UIView *)view {
+
+    DMProgressView *progressView = [[self alloc] p_initWithView:view];
+    progressView.backgroundColor = [UIColor clearColor];
+    [view addSubview:progressView];
+    
+    [progressView p_show];
+    
+    return progressView;
+}
+
+- (id)p_initWithView:(UIView *)view {
+
+    return [self initWithFrame:view.bounds];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+
+    if (self = [super initWithFrame:frame]) {
+        
+        [self p_configCommon];
+    }
+    
+    return self;
+}
+
+- (void)p_configCommon {
+    
+    self.backgroundColor = [UIColor clearColor];
+    self.alpha = 0;
+    _margin = 20;
+    
+    [self p_setUpConponents];
+    [self p_updateConstraints];
+}
+
+- (void)p_setUpConponents {
+    
+    //Background view
+    self.vBackground = [[UIView alloc] init];
+    self.vBackground.translatesAutoresizingMaskIntoConstraints = NO;
+    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6];
+    self.vBackground.layer.cornerRadius = 5;
+    self.vBackground.layer.masksToBounds = YES;
+    [self addSubview:self.vBackground];
+    
+    //Custom view
+    _customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProgressSuccess"]];
+    _customView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Text label
+    self.label = [[UILabel alloc] init];
+    self.label.translatesAutoresizingMaskIntoConstraints = NO;
+    self.label.text = @"Loading Loading";
+    self.label.textColor = [UIColor whiteColor];
+    self.label.font = [UIFont systemFontOfSize:16.0];
+    [_vBackground addSubview:self.label];
+    
+    //UIActivityIndicatorView
+    _indicator = [[UIActivityIndicatorView alloc] init];
+    _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [_indicator startAnimating];
+    
+}
+
+- (void)p_updateConstraints {
+
+    //background view
+    NSMutableArray *bgConstraints = [NSMutableArray new];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-_margin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-_margin]];
+    [self addConstraints:bgConstraints];
+    
+    if (_mode == DMProgressViewModeLoading) {
+        
+        NSLog(@"DMProgressViewModeLoading");
+        [_vBackground addSubview:_customView];
+        //[_customView addSubview:_indicator];
+        
+        NSMutableArray *cusViewConstraints = [NSMutableArray new];
+        [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_vBackground attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self configConstraints:cusViewConstraints forSubView:_customView minimumWidth:22 minimumHeight:22];
+        [self updateBgViewWithTopView:_customView bottomView:_customView widthView:_customView];
+        [_vBackground addConstraints:cusViewConstraints];
+        
+        
+    } else if (_mode == DMProgressViewModeProgress) {
+    
+        NSLog(@"DMProgressViewModeProgress");
+    
+    } else if (_mode == DMProgressViewModeStatus) {
+    
+        NSLog(@"DMProgressViewModeStatus");
+    
+    } else if (_mode == DMProgressViewModeText) {
+    
+        [_customView removeFromSuperview];
+        [_vBackground addSubview:_label];
+        //label
+        NSMutableArray *labConstraints = [NSMutableArray new];
+        [labConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_vBackground attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+        [self updateBgViewWithTopView:_label bottomView:_label widthView:_label];
+        [_vBackground addConstraints:labConstraints];
+    }
+}
+
+- (void)p_show {
+
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        
+        self.alpha = 1;
+        
+    } completion:^(BOOL finished) {
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+                
+                self.alpha = 0;
+            } completion:^(BOOL finished) {
+                
+                [self removeFromSuperview];
+            }];
+        });
+    }];
+}
+
+
+- (void)setMode:(DMProgressViewMode)mode {
+
+    _mode = mode;
+    
+    [self p_updateConstraints];
+}
+
+
+- (void)configConstraints:(NSMutableArray *)constraints forSubView:(UIView *)subView minimumWidth:(CGFloat)width minimumHeight:(CGFloat)height {
+
+    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeWidth multiplier:1 constant:-padding]];
+    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeHeight multiplier:1 constant:-padding]];
+    [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:width]];
+    [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:height]];
+}
+
+- (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView widthView:(UIView *)widthView {
+
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-padding]];
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:padding]];
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeWidth multiplier:1 constant:2*padding]];
+}
+
+
+
+
+
+
+
 
 - (void)dealloc {
 

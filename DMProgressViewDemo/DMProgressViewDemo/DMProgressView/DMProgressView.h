@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, DMProgressViewMode) {
+
+    DMProgressViewModeLoading,
+
+    DMProgressViewModeProgress,
+    
+    DMProgressViewModeStatus,
+    
+    DMProgressViewModeText
+};
+
 @interface DMProgressView : UIView
 
 //process
@@ -15,7 +26,7 @@
 
 //---------------------进度---------------------
 /**【显示】进度View*/
-+ (instancetype)showProgressViewAddedTo:(UIView *)view;
++ (instancetype)showProgressViewAddedTo1:(UIView *)view;
 
 /**【隐藏】进度View*/
 - (void)hideProgressView;
@@ -31,5 +42,16 @@
 /**【显示】*/
 + (instancetype)showSuccessAddedTo:(UIView *)view message:(NSString *)message;
 
+
+#warning recode
+@property (nonatomic, assign) DMProgressViewMode mode;
+
+@property (nonatomic, strong) UIView *customView;
+
+@property (nonatomic, strong) UILabel *label;
+
+@property (nonatomic, assign) CGFloat margin;
+
++ (instancetype)showProgressViewAddedTo:(UIView *)view;
 
 @end

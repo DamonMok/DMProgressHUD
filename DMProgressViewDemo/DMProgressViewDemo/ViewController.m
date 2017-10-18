@@ -39,7 +39,7 @@
 
     if (!_arrData) {
         
-        _arrData = [NSArray arrayWithObjects:@"【进度】View", @"【加载中】View",@"【成功提示】View", nil];
+        _arrData = [NSArray arrayWithObjects:@"【进度】View", @"【加载中】View",@"【成功提示】View", @"【文字提示重构】",nil];
     }
     
     return _arrData;
@@ -91,8 +91,10 @@
         case 1:
             [self showLoadingView];
             break;
-            case 2:
+        case 2:
             [self showSuccessView];
+        case 3:
+            [self showProgress];
             
         default:
             break;
@@ -136,6 +138,14 @@
 - (void)showSuccessView {
     
     [DMProgressView showSuccessAddedTo:self.view message:@"保存成功"];
+    
+}
+
+#warning recode
+- (void)showProgress {
+
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
     
 }
 

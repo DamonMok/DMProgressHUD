@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 
 //---------------------加载中---------------------
 /**【显示】loadingView*/
-+ (instancetype)showLoadingViewAddTo:(UIView *)view;
++ (instancetype)showLoadingViewAddTo1:(UIView *)view;
 
 /**【隐藏】loadingView*/
 - (void)hideLoadingView;
@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 //---------------------成功提示---------------------
 /**【显示】*/
 + (instancetype)showSuccessAddedTo:(UIView *)view message:(NSString *)message;
+
 
 
 #warning recode
@@ -65,5 +66,8 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 @property (nonatomic, assign) CGFloat margin;
 
 + (instancetype)showProgressViewAddedTo:(UIView *)view;
+
+//custom view
+- (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
 
 @end

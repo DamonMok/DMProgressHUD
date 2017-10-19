@@ -25,6 +25,9 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
+@property (nonatomic, assign) CGFloat customWidth;
+@property (nonatomic, assign) CGFloat customHeight;
+
 @end
 
 @implementation DMProgressView
@@ -264,16 +267,20 @@
     return self;
 }
 
+//Config common parameters
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
     self.alpha = 0;
     _margin = 20;
+    self.customWidth = 22;
+    self.customHeight = 22;
     
     [self p_setUpConponents];
     [self p_updateConstraints];
 }
 
+//Set up all of the conponents
 - (void)p_setUpConponents {
     
     //Background view
@@ -288,6 +295,7 @@
     _customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_status_success_22x22_"]];
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
+    
     //Text label
     self.label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
@@ -295,7 +303,8 @@
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
     self.label.textAlignment = NSTextAlignmentCenter;
-    //self.label.numberOfLines = 0;
+    [self.label sizeToFit];
+    [self.label setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     [self.label addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:nil];
     
     //UIActivityIndicatorView
@@ -305,13 +314,8 @@
     
 }
 
+//Update contraints
 - (void)p_updateConstraints {
-
-    //背景View(_vBackground)最大宽高约束
-    NSMutableArray *bgConstraints = [NSMutableArray new];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-_margin]];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-_margin]];
-    [self addConstraints:bgConstraints];
     
     if (_mode == DMProgressViewModeLoading) {
         
@@ -326,17 +330,18 @@
     
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
+        [_vBackground removeConstraints:_vBackground.constraints];
         
         //custom
-        [self configConstraintsForSubView:_customView minimumWidth:22 minimumHeight:22];
+        [self configCustomViewContraints];
         
         //label
-        [self configConstraintsForSubView:_label minimumWidth:60 minimumHeight:0];
+        [self configLabelConstraints];
         
         CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
         [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
         
-        [self updateBgViewWithTopView:_customView bottomView:_label widthView:_label];
+        [self updateBgViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressViewModeText) {
     
@@ -345,12 +350,13 @@
         [_customView removeFromSuperview];
         
         NSMutableArray *labConstraints = [NSMutableArray new];
-        [self configConstraintsForSubView:_label minimumWidth:30 minimumHeight:0];
-        [self updateBgViewWithTopView:_label bottomView:_label widthView:_label];
+        [self configLabelConstraints];
+        [self updateBgViewWithTopView:_label bottomView:_label];
         [_vBackground addConstraints:labConstraints];
     }
 }
 
+//Animation show
 - (void)p_show {
 
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
@@ -372,32 +378,55 @@
     }];
 }
 
-- (void)configConstraintsForSubView:(UIView *)subView minimumWidth:(CGFloat)width minimumHeight:(CGFloat)height {
+//自定义视图(CustomView)约束
+- (void)configCustomViewContraints {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
-    //子视图水平居中
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    //水平居中
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    //子视图最大宽高
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*_margin]];
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*_margin]];
-    
-    //子视图最小宽高
-    [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:width]];
-    [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:height]];
+    //大小
+    [_customView addConstraint:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:_customWidth]];
+    [_customView addConstraint:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:_customHeight]];
     
     [self addConstraints:cusViewConstraints];
 }
 
-- (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView widthView:(UIView *)widthView {
+//约束Label视图
+- (void)configLabelConstraints {
+    
+    NSMutableArray *cusViewConstraints = [NSMutableArray new];
+    
+    //居中
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    
+    //最大宽高
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*_margin]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*_margin]];
+    
+    
+    [self addConstraints:cusViewConstraints];
+}
+
+//适应内容视图(_vBackground)
+- (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
+    
+    //最大宽高约束
+    NSMutableArray *bgConstraints = [NSMutableArray new];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*_margin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*_margin]];
+    [self addConstraints:bgConstraints];
+    
+    //获取比较宽的子视图
+    UIView *maxWidthView = topView.bounds.size.width > bottomView.bounds.size.width ? topView : bottomView;
 
     //根据子视图自适应父视图
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:padding]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-padding]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeRight multiplier:1 constant:padding]];
-    
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-padding]];
+    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeRight multiplier:1 constant:padding]];
+
     //内容垂直居中
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
@@ -431,21 +460,44 @@
     [self p_updateConstraints];
 }
 
-- (void)setCustomView:(UIView *)customView {
+//限制宽
+- (void)setCustomWidth:(CGFloat)customWidth {
+
+    CGFloat maxWidth = self.frame.size.width - 2*2*_margin;
+    _customWidth = customWidth > maxWidth ? maxWidth : customWidth;
+    NSLog(@"%f", _customWidth);
+}
+
+//限制高
+- (void)setCustomHeight:(CGFloat)customHeight {
+
+    CGFloat maxHeight = self.frame.size.height - 2*2*_margin;
+    _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
+    NSLog(@"%f", _customHeight);
+}
+
+//custom view
+- (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
+
+    self.customWidth = width;
+    self.customHeight = height;
     
     [_customView removeFromSuperview];
     
-    _customView = customView;
+    view.frame = CGRectMake(0, 0, _customWidth, _customHeight);
+    _customView = view;
     [self addSubview:_customView];
-    
-    customView.translatesAutoresizingMaskIntoConstraints = NO;
+    _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self p_updateConstraints];
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
 
     if ([keyPath isEqualToString:@"text"]) {
+        
+        [_label sizeToFit];
         
         [self p_updateConstraints];
     }

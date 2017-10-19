@@ -23,7 +23,7 @@
 
 #pragma mark - lazy load
 - (UITableView *)tableView {
-
+    
     if (!_tableView) {
         
         _tableView = [[UITableView alloc] init];
@@ -36,10 +36,10 @@
 }
 
 - (NSArray *)arrData {
-
+    
     if (!_arrData) {
         
-        _arrData = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】纯文字提示",nil];
+        _arrData = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】纯文字提示", @"【重构】自定义",nil];
     }
     
     return _arrData;
@@ -59,12 +59,12 @@
 
 #pragma mark - tableView dataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    
     return self.arrData.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     static NSString *reusedId = @"Hub";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reusedId];
@@ -83,7 +83,7 @@
 
 #pragma mark - tableView delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
     switch (indexPath.row) {
         case 0:
             [self showProgressSuccess];
@@ -96,6 +96,10 @@
             break;
         case 3:
             [self showProgressText];
+            break;
+        case 4:
+            [self showCustomView];
+            break;
             
         default:
             break;
@@ -106,7 +110,7 @@
 - (void)showProgressView {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-
+    
     NSArray *arrProcess = @[@0, @0.2, @0.4, @0.6, @0.8, @1.0];
     
     __block int i = 0;
@@ -117,7 +121,7 @@
             progressView.process = [arrProcess[i] doubleValue];
             i++;
         } else {
-        
+            
             [timer invalidate];
             [progressView hideProgressView];
         }
@@ -126,8 +130,8 @@
 
 #pragma mark 加载中
 - (void)showLoadingView {
-
-    DMProgressView *progressView = [DMProgressView showLoadingViewAddTo:self.view];
+    
+    DMProgressView *progressView = [DMProgressView showLoadingViewAddTo1:self.view];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
@@ -144,11 +148,10 @@
 
 #warning recode
 - (void)showProgressSuccess {
-
+    
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.status = DMProgressViewStatusSuccess;
-    //progressView.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_status_fail_24x24_"]];
     progressView.label.text = @"Success status";
 }
 
@@ -173,6 +176,17 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeText;
     progressView.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
+}
+
+- (void)showCustomView {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeStatus;
+    progressView.label.text = @"Custom view";
+    
+    //custom
+    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
+    [progressView setCustomView:view width:80 height:80];
 }
 
 

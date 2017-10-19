@@ -39,7 +39,7 @@
 
     if (!_arrData) {
         
-        _arrData = [NSArray arrayWithObjects:@"【进度】View", @"【加载中】View",@"【成功提示】View", @"【文字提示重构】",nil];
+        _arrData = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】纯文字提示",nil];
     }
     
     return _arrData;
@@ -86,15 +86,16 @@
 
     switch (indexPath.row) {
         case 0:
-            [self showProgressView];
+            [self showProgressSuccess];
             break;
         case 1:
-            [self showLoadingView];
+            [self showProgressFail];
             break;
         case 2:
-            [self showSuccessView];
+            [self showProgressWarning];
+            break;
         case 3:
-            [self showProgress];
+            [self showProgressText];
             
         default:
             break;
@@ -142,12 +143,35 @@
 }
 
 #warning recode
-- (void)showProgress {
+- (void)showProgressSuccess {
 
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
-    progressView.status = DMProgressViewModeStatusSuccess;
-    progressView.label.text = @"正在加载";
+    progressView.status = DMProgressViewStatusSuccess;
+    progressView.label.text = @"Success status";
+}
+
+- (void)showProgressFail {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeStatus;
+    progressView.status = DMProgressViewStatusFail;
+    progressView.label.text = @"Fail status";
+}
+
+- (void)showProgressWarning {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeStatus;
+    progressView.status = DMProgressViewStatusWarning;
+    progressView.label.text = @"Warning status";
+}
+
+- (void)showProgressText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeText;
+    progressView.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
 }
 
 

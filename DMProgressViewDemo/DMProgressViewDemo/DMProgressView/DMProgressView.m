@@ -291,7 +291,7 @@
     //Text label
     self.label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
-    self.label.text = @"保存成功";
+    self.label.text = @"success";
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
     self.label.textAlignment = NSTextAlignmentCenter;
@@ -380,8 +380,8 @@
     [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
     //子视图最大宽高
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-padding]];
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-padding]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*_margin]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*_margin]];
     
     //子视图最小宽高
     [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:width]];
@@ -415,13 +415,17 @@
 
     _status = status;
     
-    if (status == DMProgressViewModeStatusSuccess) {
+    if (status == DMProgressViewStatusSuccess) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_success_22x22_"];
         
-    } else if (status == DMProgressViewModeStatusFail) {
+    } else if (status == DMProgressViewStatusFail) {
     
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_fail_24x24_"];
+        
+    } else if (status == DMProgressViewStatusWarning) {
+        
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_warning_48x48_"];
     }
     
     [self p_updateConstraints];

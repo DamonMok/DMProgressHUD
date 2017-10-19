@@ -21,9 +21,11 @@ typedef NS_ENUM(NSInteger, DMProgressViewMode) {
 
 typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 
-    DMProgressViewModeStatusSuccess,
+    DMProgressViewStatusSuccess,
     
-    DMProgressViewModeStatusFail,
+    DMProgressViewStatusFail,
+    
+    DMProgressViewStatusWarning
     
 };
 

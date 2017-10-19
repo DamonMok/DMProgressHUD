@@ -431,7 +431,17 @@
     [self p_updateConstraints];
 }
 
-
+- (void)setCustomView:(UIView *)customView {
+    
+    [_customView removeFromSuperview];
+    
+    _customView = customView;
+    [self addSubview:_customView];
+    
+    customView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self p_updateConstraints];
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
 

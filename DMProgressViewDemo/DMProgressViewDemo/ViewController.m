@@ -148,6 +148,7 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.status = DMProgressViewStatusSuccess;
+    //progressView.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_status_fail_24x24_"]];
     progressView.label.text = @"Success status";
 }
 

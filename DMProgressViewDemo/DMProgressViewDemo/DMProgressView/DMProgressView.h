@@ -19,6 +19,14 @@ typedef NS_ENUM(NSInteger, DMProgressViewMode) {
     DMProgressViewModeText
 };
 
+typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
+
+    DMProgressViewModeStatusSuccess,
+    
+    DMProgressViewModeStatusFail,
+    
+};
+
 @interface DMProgressView : UIView
 
 //process
@@ -45,6 +53,8 @@ typedef NS_ENUM(NSInteger, DMProgressViewMode) {
 
 #warning recode
 @property (nonatomic, assign) DMProgressViewMode mode;
+
+@property (nonatomic, assign) DMProgressViewStatus status;
 
 @property (nonatomic, strong) UIView *customView;
 

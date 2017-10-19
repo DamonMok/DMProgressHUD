@@ -145,8 +145,9 @@
 - (void)showProgress {
 
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
-    //progressView.label.text = @"This is your message";
+    progressView.mode = DMProgressViewModeStatus;
+    progressView.status = DMProgressViewModeStatusSuccess;
+    progressView.label.text = @"正在加载";
 }
 
 

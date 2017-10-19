@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E426BBDC1F9353E80040F100 /* ProgressSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = E426BBDA1F9353E80040F100 /* ProgressSuccess.png */; };
-		E426BBDD1F9353E80040F100 /* ProgressSuccess@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E426BBDB1F9353E80040F100 /* ProgressSuccess@3x.png */; };
+		E42217C41F987057004861A1 /* progress_status_fail_24x24_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E42217C01F987057004861A1 /* progress_status_fail_24x24_@2x.png */; };
+		E42217C51F987057004861A1 /* progress_status_fail_24x24_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E42217C11F987057004861A1 /* progress_status_fail_24x24_@3x.png */; };
+		E42217C61F987057004861A1 /* progress_status_success_22x22_@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E42217C21F987057004861A1 /* progress_status_success_22x22_@2x.png */; };
+		E42217C71F987057004861A1 /* progress_status_success_22x22_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E42217C31F987057004861A1 /* progress_status_success_22x22_@3x.png */; };
 		E429075F1F78A9E100A863E7 /* DMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E429075E1F78A9E100A863E7 /* DMProgressView.m */; };
 		E4F7E62A1F592D910025BF84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E6291F592D910025BF84 /* main.m */; };
 		E4F7E62D1F592D910025BF84 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F7E62C1F592D910025BF84 /* AppDelegate.m */; };
@@ -38,8 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E426BBDA1F9353E80040F100 /* ProgressSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressSuccess.png; sourceTree = "<group>"; };
-		E426BBDB1F9353E80040F100 /* ProgressSuccess@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ProgressSuccess@3x.png"; sourceTree = "<group>"; };
+		E42217C01F987057004861A1 /* progress_status_fail_24x24_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_status_fail_24x24_@2x.png"; sourceTree = "<group>"; };
+		E42217C11F987057004861A1 /* progress_status_fail_24x24_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_status_fail_24x24_@3x.png"; sourceTree = "<group>"; };
+		E42217C21F987057004861A1 /* progress_status_success_22x22_@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_status_success_22x22_@2x.png"; sourceTree = "<group>"; };
+		E42217C31F987057004861A1 /* progress_status_success_22x22_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "progress_status_success_22x22_@3x.png"; sourceTree = "<group>"; };
 		E429075D1F78A9E100A863E7 /* DMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMProgressView.h; sourceTree = "<group>"; };
 		E429075E1F78A9E100A863E7 /* DMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMProgressView.m; sourceTree = "<group>"; };
 		E4F7E6251F592D910025BF84 /* DMProgressViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMProgressViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,8 +92,10 @@
 		E426BBD31F934BDD0040F100 /* DMImgSources */ = {
 			isa = PBXGroup;
 			children = (
-				E426BBDA1F9353E80040F100 /* ProgressSuccess.png */,
-				E426BBDB1F9353E80040F100 /* ProgressSuccess@3x.png */,
+				E42217C01F987057004861A1 /* progress_status_fail_24x24_@2x.png */,
+				E42217C11F987057004861A1 /* progress_status_fail_24x24_@3x.png */,
+				E42217C21F987057004861A1 /* progress_status_success_22x22_@2x.png */,
+				E42217C31F987057004861A1 /* progress_status_success_22x22_@3x.png */,
 			);
 			path = DMImgSources;
 			sourceTree = "<group>";
@@ -274,10 +280,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E426BBDC1F9353E80040F100 /* ProgressSuccess.png in Resources */,
-				E426BBDD1F9353E80040F100 /* ProgressSuccess@3x.png in Resources */,
+				E42217C41F987057004861A1 /* progress_status_fail_24x24_@2x.png in Resources */,
 				E4F7E6381F592D910025BF84 /* LaunchScreen.storyboard in Resources */,
+				E42217C51F987057004861A1 /* progress_status_fail_24x24_@3x.png in Resources */,
 				E4F7E6351F592D910025BF84 /* Assets.xcassets in Resources */,
+				E42217C61F987057004861A1 /* progress_status_success_22x22_@2x.png in Resources */,
+				E42217C71F987057004861A1 /* progress_status_success_22x22_@3x.png in Resources */,
 				E4F7E6331F592D910025BF84 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

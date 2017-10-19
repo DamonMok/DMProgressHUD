@@ -285,16 +285,18 @@
     [self addSubview:self.vBackground];
     
     //Custom view
-    _customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProgressSuccess"]];
+    _customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_status_success_22x22_"]];
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Text label
     self.label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
-    self.label.text = @"Loading...";
+    self.label.text = @"保存成功";
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
     self.label.textAlignment = NSTextAlignmentCenter;
+    //self.label.numberOfLines = 0;
+    [self.label addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:nil];
     
     //UIActivityIndicatorView
     _indicator = [[UIActivityIndicatorView alloc] init];
@@ -305,9 +307,8 @@
 
 - (void)p_updateConstraints {
 
-    //background view
+    //背景View(_vBackground)最大宽高约束
     NSMutableArray *bgConstraints = [NSMutableArray new];
-    
     [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-_margin]];
     [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-_margin]];
     [self addConstraints:bgConstraints];
@@ -315,20 +316,6 @@
     if (_mode == DMProgressViewModeLoading) {
         
         NSLog(@"DMProgressViewModeLoading");
-        [_vBackground addSubview:_customView];
-        [_vBackground addSubview:_label];
-        
-        NSMutableArray *cusViewConstraints = [NSMutableArray new];
-        [self configConstraints:cusViewConstraints forSubView:_customView minimumWidth:22 minimumHeight:22];
-        [self addConstraints:cusViewConstraints];
-        
-        NSMutableArray *labConstraints = [NSMutableArray new];
-        [self configConstraints:labConstraints forSubView:_label minimumWidth:60 minimumHeight:0];
-        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTopMargin relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:_margin]];
-        [self addConstraints:labConstraints];
-        
-        [self updateBgViewWithTopView:_customView bottomView:_label widthView:_label];
-        
         
         
     } else if (_mode == DMProgressViewModeProgress) {
@@ -337,15 +324,28 @@
     
     } else if (_mode == DMProgressViewModeStatus) {
     
-        NSLog(@"DMProgressViewModeStatus");
+        [_vBackground addSubview:_customView];
+        [_vBackground addSubview:_label];
+        
+        //custom
+        [self configConstraintsForSubView:_customView minimumWidth:22 minimumHeight:22];
+        
+        //label
+        [self configConstraintsForSubView:_label minimumWidth:60 minimumHeight:0];
+        
+        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
+        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+        
+        [self updateBgViewWithTopView:_customView bottomView:_label widthView:_label];
     
     } else if (_mode == DMProgressViewModeText) {
     
         //label
         [_vBackground addSubview:_label];
+        [_customView removeFromSuperview];
         
         NSMutableArray *labConstraints = [NSMutableArray new];
-        [self configConstraints:labConstraints forSubView:_label minimumWidth:30 minimumHeight:0];
+        [self configConstraintsForSubView:_label minimumWidth:30 minimumHeight:0];
         [self updateBgViewWithTopView:_label bottomView:_label widthView:_label];
         [_vBackground addConstraints:labConstraints];
     }
@@ -372,25 +372,22 @@
     }];
 }
 
-
-- (void)setMode:(DMProgressViewMode)mode {
-
-    _mode = mode;
+- (void)configConstraintsForSubView:(UIView *)subView minimumWidth:(CGFloat)width minimumHeight:(CGFloat)height {
     
-    [self p_updateConstraints];
-}
-
-
-- (void)configConstraints:(NSMutableArray *)constraints forSubView:(UIView *)subView minimumWidth:(CGFloat)width minimumHeight:(CGFloat)height {
+    NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
     //子视图水平居中
-    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    //子视图最大/最小 宽高
-    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeWidth multiplier:1 constant:-padding]];
-    [constraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:_vBackground attribute:NSLayoutAttributeHeight multiplier:1 constant:-padding]];
+    //子视图最大宽高
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-padding]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-padding]];
+    
+    //子视图最小宽高
     [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:width]];
     [subView addConstraint:[NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:height]];
+    
+    [self addConstraints:cusViewConstraints];
 }
 
 - (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView widthView:(UIView *)widthView {
@@ -401,20 +398,49 @@
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:widthView attribute:NSLayoutAttributeRight multiplier:1 constant:padding]];
     
-    //内容居中、宽高边距限制
+    //内容垂直居中
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
 }
 
 
+- (void)setMode:(DMProgressViewMode)mode {
+    
+    _mode = mode;
+    
+    [self p_updateConstraints];
+}
+
+- (void)setStatus:(DMProgressViewStatus)status {
+
+    _status = status;
+    
+    if (status == DMProgressViewModeStatusSuccess) {
+        
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_success_22x22_"];
+        
+    } else if (status == DMProgressViewModeStatusFail) {
+    
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_fail_24x24_"];
+    }
+    
+    [self p_updateConstraints];
+}
 
 
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
 
+    if ([keyPath isEqualToString:@"text"]) {
+        
+        [self p_updateConstraints];
+    }
+}
 
 
 - (void)dealloc {
 
+    [self.label removeObserver:self forKeyPath:@"text"];
     NSLog(@"%s", __func__);
 }
 

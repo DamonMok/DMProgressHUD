@@ -297,7 +297,7 @@
     
     
     //Text label
-    self.label = [[UILabel alloc] init];
+    _label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
     self.label.text = @"success";
     self.label.textColor = [UIColor whiteColor];
@@ -310,7 +310,7 @@
     //UIActivityIndicatorView
     _indicator = [[UIActivityIndicatorView alloc] init];
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    [_indicator startAnimating];
+    _indicator.translatesAutoresizingMaskIntoConstraints = NO;
     
 }
 
@@ -319,8 +319,15 @@
     
     if (_mode == DMProgressViewModeLoading) {
         
-        NSLog(@"DMProgressViewModeLoading");
+        [_indicator startAnimating];
+        self.customView = _indicator;
+        [_vBackground addSubview:_customView];
         
+        self.customWidth = 34;
+        self.customHeight = self.customWidth;
+        
+        [self configCustomViewContraints];
+        [self updateBgViewWithTopView:_customView bottomView:_customView];
         
     } else if (_mode == DMProgressViewModeProgress) {
     
@@ -331,6 +338,7 @@
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
         [_vBackground removeConstraints:_vBackground.constraints];
+        [_customView removeConstraints:_customView.constraints];
         
         //custom
         [self configCustomViewContraints];
@@ -349,10 +357,8 @@
         [_vBackground addSubview:_label];
         [_customView removeFromSuperview];
         
-        NSMutableArray *labConstraints = [NSMutableArray new];
         [self configLabelConstraints];
         [self updateBgViewWithTopView:_label bottomView:_label];
-        [_vBackground addConstraints:labConstraints];
     }
 }
 
@@ -444,6 +450,12 @@
 
     _status = status;
     
+    self.customWidth = 22;
+    self.customHeight = self.customWidth;
+    
+    self.customView = [[UIImageView alloc] init];
+    _customView.translatesAutoresizingMaskIntoConstraints = NO;
+    
     if (status == DMProgressViewStatusSuccess) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_success_22x22_"];
@@ -460,12 +472,19 @@
     [self p_updateConstraints];
 }
 
+- (void)setCustomView:(UIView *)customView {
+
+    [_customView removeFromSuperview];
+    _customView = customView;
+    _customView.frame = CGRectMake(0, 0, _customWidth, _customHeight);
+    _customView.translatesAutoresizingMaskIntoConstraints = NO;
+}
+
 //限制宽
 - (void)setCustomWidth:(CGFloat)customWidth {
 
     CGFloat maxWidth = self.frame.size.width - 2*2*_margin;
     _customWidth = customWidth > maxWidth ? maxWidth : customWidth;
-    NSLog(@"%f", _customWidth);
 }
 
 //限制高
@@ -473,7 +492,6 @@
 
     CGFloat maxHeight = self.frame.size.height - 2*2*_margin;
     _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
-    NSLog(@"%f", _customHeight);
 }
 
 //custom view
@@ -482,12 +500,8 @@
     self.customWidth = width;
     self.customHeight = height;
     
-    [_customView removeFromSuperview];
-    
-    view.frame = CGRectMake(0, 0, _customWidth, _customHeight);
-    _customView = view;
+    self.customView = view;
     [self addSubview:_customView];
-    _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self p_updateConstraints];
     

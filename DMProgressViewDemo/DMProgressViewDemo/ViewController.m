@@ -15,7 +15,7 @@
 }
 
 @property (nonatomic, strong)UITableView *tableView;
-@property (nonatomic, strong)NSArray *arrData;
+@property (nonatomic, strong)NSMutableArray<NSArray *> *arrData;
 
 @end
 
@@ -27,7 +27,6 @@
     if (!_tableView) {
         
         _tableView = [[UITableView alloc] init];
-        _tableView.backgroundColor = [UIColor lightGrayColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }
@@ -35,11 +34,15 @@
     return _tableView;
 }
 
-- (NSArray *)arrData {
+- (NSMutableArray *)arrData {
     
     if (!_arrData) {
         
-        _arrData = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】纯文字提示", @"【重构】自定义",nil];
+        NSArray *arrLoading = @[@"Loading"];
+        NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】自定义",nil];
+        NSArray *arrText = @[@"【重构】纯文字提示"];
+        
+        _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrStatus, arrText, nil];
     }
     
     return _arrData;
@@ -49,18 +52,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.frame = self.view.bounds;
-    self.tableView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0);
+    self.tableView.frame = CGRectMake(0, 22, self.view.bounds.size.width, self.view.bounds.size.height-22);
     self.tableView.tableFooterView = [[UIView alloc] init];
+    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     
     
 }
 
 #pragma mark - tableView dataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
+    return self.arrData.count;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.arrData.count;
+    return self.arrData[section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -74,9 +82,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusedId];
     }
     
-    NSString *strText = self.arrData[indexPath.row];
+    cell.selectedBackgroundView = [[UIView alloc] init];
+    cell.selectedBackgroundView.backgroundColor = [UIColor colorWithWhite:.1f alpha:0.1];
+    
+    NSArray *arrDetail = _arrData[indexPath.section];
+    NSString *strText = arrDetail[indexPath.row];
     
     cell.textLabel.text = strText;
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     
     return cell;
 }
@@ -84,24 +97,61 @@
 #pragma mark - tableView delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    switch (indexPath.row) {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell setSelected:!cell.selected animated:YES];
+    
+    if (indexPath.section == 0) {
+        [self showProgressLoading];
+        
+    } else if (indexPath.section == 1) {
+        
+        switch (indexPath.row) {
+            case 0:
+                [self showProgressStatusSuccess];
+                break;
+            case 1:
+                [self showProgressStatusFail];
+                break;
+            case 2:
+                [self showProgressStatusWarning];
+                break;
+            case 3:
+                [self showCustomView];
+                break;
+                
+            default:
+                break;
+        }
+    } else if (indexPath.section == 2) {
+    
+        switch (indexPath.row) {
+            case 0:
+                [self showProgressText];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+
+    switch (section) {
         case 0:
-            [self showProgressSuccess];
+            return @"Loading";
             break;
+        
         case 1:
-            [self showProgressFail];
+            return @"Status";
             break;
         case 2:
-            [self showProgressWarning];
-            break;
-        case 3:
-            [self showProgressText];
-            break;
-        case 4:
-            [self showCustomView];
+            return @"Text";
             break;
             
         default:
+            return @"";
             break;
     }
 }
@@ -147,7 +197,13 @@
 }
 
 #warning recode
-- (void)showProgressSuccess {
+- (void)showProgressLoading {
+
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
+}
+
+- (void)showProgressStatusSuccess {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
@@ -155,7 +211,7 @@
     progressView.label.text = @"Success status";
 }
 
-- (void)showProgressFail {
+- (void)showProgressStatusFail {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
@@ -163,7 +219,7 @@
     progressView.label.text = @"Fail status";
 }
 
-- (void)showProgressWarning {
+- (void)showProgressStatusWarning {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;

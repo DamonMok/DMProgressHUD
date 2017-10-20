@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 
 @property (nonatomic, strong) UIView *customView;
 
-@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong, readonly) UILabel *label;
 
 @property (nonatomic, assign) CGFloat margin;
 

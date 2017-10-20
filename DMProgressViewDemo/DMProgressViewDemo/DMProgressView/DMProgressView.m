@@ -299,7 +299,7 @@
     //Text label
     _label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
-    self.label.text = @"success";
+    self.label.text = @"Description";
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
     self.label.textAlignment = NSTextAlignmentCenter;
@@ -333,7 +333,7 @@
     
         NSLog(@"DMProgressViewModeProgress");
     
-    } else if (_mode == DMProgressViewModeStatus) {
+    } else if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeCustom) {
     
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
@@ -432,6 +432,7 @@
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeRight multiplier:1 constant:padding]];
+    
 
     //内容垂直居中
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
@@ -450,6 +451,7 @@
 
     _status = status;
     
+    //default width&height
     self.customWidth = 22;
     self.customHeight = self.customWidth;
     

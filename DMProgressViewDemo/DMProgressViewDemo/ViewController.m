@@ -39,10 +39,10 @@
     if (!_arrData) {
         
         NSArray *arrLoading = @[@"Loading"];
-        NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", @"【重构】自定义",nil];
+        NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
         NSArray *arrText = @[@"【重构】纯文字提示"];
-        
-        _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrStatus, arrText, nil];
+        NSArray *arrCustom = @[@"【重构】自定义", @"【重构】自定义-带文字"];
+        _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrStatus, arrText,arrCustom, nil];
     }
     
     return _arrData;
@@ -115,10 +115,6 @@
             case 2:
                 [self showProgressStatusWarning];
                 break;
-            case 3:
-                [self showCustomView];
-                break;
-                
             default:
                 break;
         }
@@ -127,6 +123,19 @@
         switch (indexPath.row) {
             case 0:
                 [self showProgressText];
+                break;
+                
+            default:
+                break;
+        }
+    } else if (indexPath.section == 3) {
+    
+        switch (indexPath.row) {
+            case 0:
+                [self showProgressCustom];
+                break;
+            case 1:
+                [self showProgressCustomWithText];
                 break;
                 
             default:
@@ -148,6 +157,9 @@
             break;
         case 2:
             return @"Text";
+            break;
+        case 3:
+            return @"Custom";
             break;
             
         default:
@@ -208,7 +220,7 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.status = DMProgressViewStatusSuccess;
-    progressView.label.text = @"Success status";
+    progressView.label.text = @"Success";
 }
 
 - (void)showProgressStatusFail {
@@ -216,7 +228,7 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.status = DMProgressViewStatusFail;
-    progressView.label.text = @"Fail status";
+    progressView.label.text = @"Fail";
 }
 
 - (void)showProgressStatusWarning {
@@ -234,11 +246,21 @@
     progressView.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
 }
 
-- (void)showCustomView {
+- (void)showProgressCustom {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeStatus;
-    progressView.label.text = @"Custom view";
+    progressView.mode = DMProgressViewModeCustom;
+    progressView.label.text = @"";
+    //custom
+    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
+    [progressView setCustomView:view width:80 height:80];
+}
+
+- (void)showProgressCustomWithText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeCustom;
+    progressView.label.text = @"Custom with label";
     
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];

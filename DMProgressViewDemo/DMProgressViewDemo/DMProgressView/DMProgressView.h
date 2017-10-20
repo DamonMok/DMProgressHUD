@@ -16,7 +16,9 @@ typedef NS_ENUM(NSInteger, DMProgressViewMode) {
     
     DMProgressViewModeStatus,
     
-    DMProgressViewModeText
+    DMProgressViewModeText,
+    
+    DMProgressViewModeCustom
 };
 
 typedef NS_ENUM(NSInteger, DMProgressViewStatus) {

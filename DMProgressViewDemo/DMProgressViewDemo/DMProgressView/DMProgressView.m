@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
+@property (nonatomic, strong) CAShapeLayer *progressLayer;
+
 @property (nonatomic, assign) CGFloat customWidth;
 @property (nonatomic, assign) CGFloat customHeight;
 
@@ -64,17 +66,17 @@
 
 - (void)drawRect:(CGRect)rect {
     
-    CGPoint center = CGPointMake(rect.size.width*0.5, rect.size.height*0.5);
-    CGFloat radius = rect.size.width*0.5;
+    CGPoint center = CGPointMake(_customWidth*0.5, _customHeight*0.5);
+    CGFloat radius = _customWidth*0.5;
     
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*self.process clockwise:YES];
-    self.processLayer.path = [path CGPath];
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
+    self.progressLayer.path = [path CGPath];
     
-    self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
-    self.labProcess.center = center;
-    self.labProcess.text = [NSString stringWithFormat:@"%.0f", self.process*100];
-    
-    self.labProcess.hidden = self.process>0?NO:YES;
+//    self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
+//    self.labProcess.center = center;
+//    self.labProcess.text = [NSString stringWithFormat:@"%.0f", self.process*100];
+//    
+//    self.labProcess.hidden = self.process>0?NO:YES;
     
 }
 
@@ -311,6 +313,11 @@
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     _indicator.translatesAutoresizingMaskIntoConstraints = NO;
     
+    //Progress
+    _progressLayer = [[CAShapeLayer alloc] init];
+    _progressLayer.lineWidth = 2.0;
+    _progressLayer.strokeColor = [[UIColor whiteColor] CGColor];
+    _progressLayer.fillColor = [[UIColor clearColor] CGColor];
 }
 
 //Update contraints
@@ -338,7 +345,20 @@
         
     } else if (_mode == DMProgressViewModeProgress) {
     
-        NSLog(@"DMProgressViewModeProgress");
+        self.customView = [[UIView alloc] init];
+        [_customView.layer addSublayer:_progressLayer];
+        [_vBackground addSubview:_customView];
+        
+        self.customWidth = 34;
+        self.customHeight = self.customWidth;
+        
+        //custom
+        [self configCustomViewContraints];
+        
+        //label
+        //[self configLabelConstraintsWithTopView:_customView];
+        
+        [self updateBgViewWithTopView:_customView bottomView:_customView];
     
     } else if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeCustom) {
     
@@ -375,16 +395,24 @@
         
     } completion:^(BOOL finished) {
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_mode != DMProgressViewModeProgress) {
             
-            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
-                self.alpha = 0;
-            } completion:^(BOOL finished) {
-                
-                [self removeFromSuperview];
-            }];
-        });
+                [self hide];
+            });
+        }
+    }];
+}
+
+- (void)hide {
+
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
+        
+        [self removeFromSuperview];
     }];
 }
 
@@ -449,6 +477,21 @@
 }
 
 
++ (DMProgressView *)progressViewForView:(UIView *)view {
+
+    NSEnumerator *subViewsEnumerator = [view.subviews reverseObjectEnumerator];
+    
+    for (UIView *subView in subViewsEnumerator) {
+        
+        if ([subView isKindOfClass:self]) {
+            
+            return (DMProgressView *)subView;
+        }
+    }
+    
+    return nil;
+}
+
 - (void)setMode:(DMProgressViewMode)mode {
     
     _mode = mode;
@@ -483,28 +526,6 @@
     [self p_updateConstraints];
 }
 
-- (void)setCustomView:(UIView *)customView {
-
-    [_customView removeFromSuperview];
-    _customView = customView;
-    _customView.frame = CGRectMake(0, 0, _customWidth, _customHeight);
-    _customView.translatesAutoresizingMaskIntoConstraints = NO;
-}
-
-//限制宽
-- (void)setCustomWidth:(CGFloat)customWidth {
-
-    CGFloat maxWidth = self.frame.size.width - 2*2*_margin;
-    _customWidth = customWidth > maxWidth ? maxWidth : customWidth;
-}
-
-//限制高
-- (void)setCustomHeight:(CGFloat)customHeight {
-
-    CGFloat maxHeight = self.frame.size.height - 2*2*_margin;
-    _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
-}
-
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
@@ -516,6 +537,38 @@
     
     [self p_updateConstraints];
     
+}
+
+- (void)setCustomView:(UIView *)customView {
+    
+    [_customView removeFromSuperview];
+    _customView = customView;
+    _customView.frame = CGRectMake(0, 0, _customWidth, _customHeight);
+    _customView.translatesAutoresizingMaskIntoConstraints = NO;
+}
+
+//限制宽
+- (void)setCustomWidth:(CGFloat)customWidth {
+    
+    CGFloat maxWidth = self.frame.size.width - 2*2*_margin;
+    _customWidth = customWidth > maxWidth ? maxWidth : customWidth;
+}
+
+//限制高
+- (void)setCustomHeight:(CGFloat)customHeight {
+    
+    CGFloat maxHeight = self.frame.size.height - 2*2*_margin;
+    _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
+}
+
+- (void)setProgress:(CGFloat)progress {
+
+    _progress = progress;
+    
+    //2%预显示
+    _progress = _progress > 0.02 ? _progress : 0.02;
+    
+    [self setNeedsDisplay];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {

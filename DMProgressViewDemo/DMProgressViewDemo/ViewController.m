@@ -14,8 +14,9 @@
     int _index;
 }
 
-@property (nonatomic, strong)UITableView *tableView;
-@property (nonatomic, strong)NSMutableArray<NSArray *> *arrData;
+@property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSMutableArray<NSArray *> *arrData;
 
 @end
 
@@ -37,12 +38,13 @@
 - (NSMutableArray *)arrData {
     
     if (!_arrData) {
-        
+    
         NSArray *arrLoading = @[@"Loading", @"Loading-带文字"];
+        NSArray *arrProgress = @[@"Progress"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
         NSArray *arrText = @[@"【重构】纯文字提示"];
         NSArray *arrCustom = @[@"【重构】自定义", @"【重构】自定义-带文字"];
-        _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrStatus, arrText,arrCustom, nil];
+        _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrProgress ,arrStatus, arrText,arrCustom, nil];
     }
     
     return _arrData;
@@ -113,7 +115,11 @@
                 break;
         }
         
-    } else if (indexPath.section == 1) {
+    }else if (indexPath.section == 1) {
+        
+        [self showProgress];
+        
+    } else if (indexPath.section == 2) {
         
         switch (indexPath.row) {
             case 0:
@@ -128,7 +134,7 @@
             default:
                 break;
         }
-    } else if (indexPath.section == 2) {
+    } else if (indexPath.section == 3) {
     
         switch (indexPath.row) {
             case 0:
@@ -138,7 +144,7 @@
             default:
                 break;
         }
-    } else if (indexPath.section == 3) {
+    } else if (indexPath.section == 4) {
     
         switch (indexPath.row) {
             case 0:
@@ -159,16 +165,20 @@
 
     switch (section) {
         case 0:
-            return @"Loading";
+        return @"Loading";
+        break;
+            
+        case 1:
+            return @"Progress";
             break;
         
-        case 1:
+        case 2:
             return @"Status";
             break;
-        case 2:
+        case 3:
             return @"Text";
             break;
-        case 3:
+        case 4:
             return @"Custom";
             break;
             
@@ -224,6 +234,22 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeLoading;
     progressView.label.text = @"";
+}
+
+- (void)showProgress {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeProgress;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView hide];
+        });
+    });
 }
 
 - (void)showProgressLoadingWithText {
@@ -285,5 +311,19 @@
     [progressView setCustomView:view width:80 height:80];
 }
 
+- (void)doSomething {
+
+    CGFloat progress = 0;
+    while (progress < 1) {
+        
+        progress += 0.01;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //refresh progress-value on main thread
+            DMProgressView *progressView = [DMProgressView progressViewForView:self.view];
+            progressView.progress = progress;
+        });
+        [NSThread sleepForTimeInterval:0.01];
+    }
+}
 
 @end

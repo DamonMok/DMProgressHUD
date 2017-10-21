@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 
 @property (nonatomic, assign) DMProgressViewStatus status;
 
+@property (nonatomic, assign) CGFloat progress;
+
 @property (nonatomic, strong) UIView *customView;
 
 @property (nonatomic, strong, readonly) UILabel *label;
@@ -71,5 +73,10 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatus) {
 
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
+
+//get current progressView
++ (DMProgressView *)progressViewForView:(UIView *)view;
+
+- (void)hide;
 
 @end

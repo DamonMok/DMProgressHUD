@@ -331,9 +331,8 @@
         [self configCustomViewContraints];
         
         //label
-        [self configLabelConstraints];
-        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
-        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+        [self configLabelConstraintsWithTopView:_customView];
+        
         
         [self updateBgViewWithTopView:_customView bottomView:_label];
         
@@ -352,10 +351,7 @@
         [self configCustomViewContraints];
         
         //label
-        [self configLabelConstraints];
-        
-        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
-        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+        [self configLabelConstraintsWithTopView:_customView];
         
         [self updateBgViewWithTopView:_customView bottomView:_label];
     
@@ -365,7 +361,7 @@
         [_vBackground addSubview:_label];
         [_customView removeFromSuperview];
         
-        [self configLabelConstraints];
+        [self configLabelConstraintsWithTopView:nil];
         [self updateBgViewWithTopView:_label bottomView:_label];
     }
 }
@@ -408,7 +404,7 @@
 }
 
 //约束Label视图
-- (void)configLabelConstraints {
+- (void)configLabelConstraintsWithTopView:(UIView *)topView {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
@@ -419,6 +415,11 @@
     [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*_margin]];
     [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*_margin]];
     
+    //上方View间距
+    if (topView) {
+        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
+        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+    }
     
     [self addConstraints:cusViewConstraints];
 }

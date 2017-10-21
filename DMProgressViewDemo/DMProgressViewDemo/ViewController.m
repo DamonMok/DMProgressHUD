@@ -9,10 +9,7 @@
 #import "ViewController.h"
 #import "DMProgressView.h"
 
-@interface ViewController ()<UITableViewDelegate, UITableViewDataSource>{
-    
-    int _index;
-}
+@interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -40,7 +37,7 @@
     if (!_arrData) {
     
         NSArray *arrLoading = @[@"Loading", @"Loading-带文字"];
-        NSArray *arrProgress = @[@"Progress"];
+        NSArray *arrProgress = @[@"Circle", @"Circel-带文字", @"Sector", @"Sector-带文字"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
         NSArray *arrText = @[@"【重构】纯文字提示"];
         NSArray *arrCustom = @[@"【重构】自定义", @"【重构】自定义-带文字"];
@@ -117,7 +114,23 @@
         
     }else if (indexPath.section == 1) {
         
-        [self showProgress];
+        switch (indexPath.row) {
+            case 0:
+                [self showProgressTypeCircle];
+                break;
+            case 1:
+                [self showProgressTypeCircleWithText];
+                break;
+            case 2:
+                [self showProgressTypeSector];
+                break;
+            case 3:
+                [self showProgressTypeSectorWithText];
+                break;
+                
+            default:
+                break;
+        }
         
     } else if (indexPath.section == 2) {
         
@@ -188,45 +201,6 @@
     }
 }
 
-#pragma mark 进度圈
-- (void)showProgressView {
-    
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    
-    NSArray *arrProcess = @[@0, @0.2, @0.4, @0.6, @0.8, @1.0];
-    
-    __block int i = 0;
-    [NSTimer scheduledTimerWithTimeInterval:0.25 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        
-        if (i < arrProcess.count) {
-            
-            progressView.process = [arrProcess[i] doubleValue];
-            i++;
-        } else {
-            
-            [timer invalidate];
-            [progressView hideProgressView];
-        }
-    }];
-}
-
-#pragma mark 加载中
-- (void)showLoadingView {
-    
-    DMProgressView *progressView = [DMProgressView showLoadingViewAddTo1:self.view];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [progressView hideLoadingView];
-    });
-}
-
-#pragma mark 成功提示
-- (void)showSuccessView {
-    
-    [DMProgressView showSuccessAddedTo:self.view message:@"保存成功"];
-    
-}
 
 #warning recode
 - (void)showProgressLoading {
@@ -236,10 +210,33 @@
     progressView.label.text = @"";
 }
 
-- (void)showProgress {
+- (void)showProgressLoadingWithText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
+    progressView.label.text = @"Loading With text";
+}
+
+- (void)showProgressTypeCircle {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeProgress;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
+}
+
+- (void)showProgressTypeCircleWithText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeProgress;
+    progressView.label.text = @"Loading...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -247,16 +244,44 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView hide];
+            [progressView dismiss];
         });
     });
 }
 
-- (void)showProgressLoadingWithText {
-
+- (void)showProgressTypeSector {
+    
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
-    progressView.label.text = @"Loading With text";
+    progressView.mode = DMProgressViewModeProgress;
+    progressView.progressType = DMProgressViewProgressTypeSector;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
+}
+
+- (void)showProgressTypeSectorWithText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeProgress;
+    progressView.progressType = DMProgressViewProgressTypeSector;
+    progressView.label.text = @"Loading...";
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
 }
 
 - (void)showProgressStatusSuccess {
@@ -264,7 +289,7 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.statusType = DMProgressViewStatusTypeSuccess;
-    progressView.label.text = @"Success";
+    progressView.label.text = @"Success status";
 }
 
 - (void)showProgressStatusFail {
@@ -272,7 +297,7 @@
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
     progressView.statusType = DMProgressViewStatusTypeFail;
-    progressView.label.text = @"Fail";
+    progressView.label.text = @"Fail status";
 }
 
 - (void)showProgressStatusWarning {

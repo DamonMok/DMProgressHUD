@@ -31,35 +31,21 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatusType) {
     
 };
 
+typedef NS_ENUM(NSInteger, DMProgressViewProgressType) {
+
+    DMProgressViewProgressTypeCircle,
+    
+    DMProgressViewProgressTypeSector
+};
+
 @interface DMProgressView : UIView
-
-//process
-@property (nonatomic, assign)CGFloat process;
-
-//---------------------进度---------------------
-/**【显示】进度View*/
-+ (instancetype)showProgressViewAddedTo1:(UIView *)view;
-
-/**【隐藏】进度View*/
-- (void)hideProgressView;
-
-//---------------------加载中---------------------
-/**【显示】loadingView*/
-+ (instancetype)showLoadingViewAddTo1:(UIView *)view;
-
-/**【隐藏】loadingView*/
-- (void)hideLoadingView;
-
-//---------------------成功提示---------------------
-/**【显示】*/
-+ (instancetype)showSuccessAddedTo:(UIView *)view message:(NSString *)message;
-
-
 
 #warning recode
 @property (nonatomic, assign) DMProgressViewMode mode;
 
 @property (nonatomic, assign) DMProgressViewStatusType statusType;
+
+@property (nonatomic, assign) DMProgressViewProgressType progressType;
 
 @property (nonatomic, assign) CGFloat progress;
 
@@ -71,12 +57,13 @@ typedef NS_ENUM(NSInteger, DMProgressViewStatusType) {
 
 + (instancetype)showProgressViewAddedTo:(UIView *)view;
 
+- (void)dismiss;
+
+
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
 
 //get current progressView
 + (DMProgressView *)progressViewForView:(UIView *)view;
-
-- (void)hide;
 
 @end

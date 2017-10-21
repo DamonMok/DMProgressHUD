@@ -25,8 +25,9 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
-@property (nonatomic, strong) CAShapeLayer *cycleLayer;
-@property (nonatomic, strong) CAShapeLayer *progressLayer;
+@property (nonatomic, strong) CAShapeLayer *layerCycle;     //defaule cycle
+@property (nonatomic, strong) CAShapeLayer *layerProgress;  //progress cycle
+@property (nonatomic, strong) UILabel *labProgress;         //progress lable
 
 @property (nonatomic, assign) CGFloat customWidth;
 @property (nonatomic, assign) CGFloat customHeight;
@@ -72,18 +73,18 @@
     
     //default cycle layer
     UIBezierPath *cyclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*1 clockwise:YES];
-    self.cycleLayer.path = [cyclePath CGPath];
+    self.layerCycle.path = [cyclePath CGPath];
     
     //progress cycle layer
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
-    self.progressLayer.path = [path CGPath];
+    self.layerProgress.path = [path CGPath];
     
     
     
-//    self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
-//    self.labProcess.center = center;
-//    self.labProcess.text = [NSString stringWithFormat:@"%.0f", self.process*100];
-//    
+    self.labProgress.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
+    self.labProgress.center = center;
+    self.labProgress.text = [NSString stringWithFormat:@"%.0f", self.progress*100];
+//
 //    self.labProcess.hidden = self.process>0?NO:YES;
     
 }
@@ -322,16 +323,21 @@
     _indicator.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Progress
-    _cycleLayer = [[CAShapeLayer alloc] init];
-    _cycleLayer.lineWidth = 3.0;
-    _cycleLayer.strokeColor = [[UIColor lightGrayColor] CGColor];
-    _cycleLayer.fillColor = [[UIColor clearColor] CGColor];
+    _layerCycle = [[CAShapeLayer alloc] init];
+    _layerCycle.lineWidth = 3.0;
+    _layerCycle.strokeColor = [[UIColor lightGrayColor] CGColor];
+    _layerCycle.fillColor = [[UIColor clearColor] CGColor];
     
-    _progressLayer = [[CAShapeLayer alloc] init];
-    _progressLayer.lineWidth = 3.0;
-    _progressLayer.strokeColor = [[UIColor whiteColor] CGColor];
-    _progressLayer.fillColor = [[UIColor clearColor] CGColor];
-    _progressLayer.lineCap = @"round";
+    _layerProgress = [[CAShapeLayer alloc] init];
+    _layerProgress.lineWidth = 3.0;
+    _layerProgress.strokeColor = [[UIColor whiteColor] CGColor];
+    _layerProgress.fillColor = [[UIColor clearColor] CGColor];
+    _layerProgress.lineCap = @"round";
+    
+    _labProgress = [[UILabel alloc] init];
+    _labProgress.textColor = [UIColor whiteColor];
+    _labProgress.textAlignment = NSTextAlignmentCenter;
+    [_labProgress sizeToFit];
 }
 
 //Update contraints
@@ -360,11 +366,12 @@
     } else if (_mode == DMProgressViewModeProgress) {
     
         self.customView = [[UIView alloc] init];
-        [_customView.layer addSublayer:_cycleLayer];
-        [_customView.layer addSublayer:_progressLayer];
+        [_customView.layer addSublayer:_layerCycle];
+        [_customView.layer addSublayer:_layerProgress];
+        [_customView.layer addSublayer:_labProgress.layer];
         [_vBackground addSubview:_customView];
         
-        self.customWidth = 34;
+        self.customWidth = 40;
         self.customHeight = self.customWidth;
         
         //custom
@@ -514,9 +521,9 @@
     [self p_updateConstraints];
 }
 
-- (void)setStatus:(DMProgressViewStatus)status {
+- (void)setStatusType:(DMProgressViewStatusType)statusType {
 
-    _status = status;
+    _statusType = statusType;
     
     //default width&height
     self.customWidth = 22;
@@ -525,15 +532,15 @@
     self.customView = [[UIImageView alloc] init];
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    if (status == DMProgressViewStatusSuccess) {
+    if (statusType == DMProgressViewStatusTypeSuccess) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_success_22x22_"];
         
-    } else if (status == DMProgressViewStatusFail) {
+    } else if (statusType == DMProgressViewStatusTypeFail) {
     
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_fail_24x24_"];
         
-    } else if (status == DMProgressViewStatusWarning) {
+    } else if (statusType == DMProgressViewStatusTypeWarning) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_warning_48x48_"];
     }

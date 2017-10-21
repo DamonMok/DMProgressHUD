@@ -263,7 +263,7 @@
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
-    progressView.status = DMProgressViewStatusSuccess;
+    progressView.statusType = DMProgressViewStatusTypeSuccess;
     progressView.label.text = @"Success";
 }
 
@@ -271,7 +271,7 @@
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
-    progressView.status = DMProgressViewStatusFail;
+    progressView.statusType = DMProgressViewStatusTypeFail;
     progressView.label.text = @"Fail";
 }
 
@@ -279,7 +279,7 @@
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeStatus;
-    progressView.status = DMProgressViewStatusWarning;
+    progressView.statusType = DMProgressViewStatusTypeWarning;
     progressView.label.text = @"Warning status";
 }
 

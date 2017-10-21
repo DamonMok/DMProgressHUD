@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, DMProgressViewProgressType) {
 
 @property (nonatomic, strong, readonly) UILabel *label;
 
-@property (nonatomic, assign) CGFloat margin;
+@property (nonatomic, assign) UIEdgeInsets insets;
 
 + (instancetype)showProgressViewAddedTo:(UIView *)view;
 

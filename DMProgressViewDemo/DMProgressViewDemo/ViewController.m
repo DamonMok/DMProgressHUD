@@ -38,7 +38,7 @@
     
     if (!_arrData) {
         
-        NSArray *arrLoading = @[@"Loading"];
+        NSArray *arrLoading = @[@"Loading", @"Loading-带文字"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
         NSArray *arrText = @[@"【重构】纯文字提示"];
         NSArray *arrCustom = @[@"【重构】自定义", @"【重构】自定义-带文字"];
@@ -101,7 +101,17 @@
     [cell setSelected:!cell.selected animated:YES];
     
     if (indexPath.section == 0) {
-        [self showProgressLoading];
+        switch (indexPath.row) {
+            case 0:
+                [self showProgressLoading];
+                break;
+            case 1:
+                [self showProgressLoadingWithText];
+                break;
+                
+            default:
+                break;
+        }
         
     } else if (indexPath.section == 1) {
         
@@ -213,6 +223,14 @@
 
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeLoading;
+    progressView.label.text = @"";
+}
+
+- (void)showProgressLoadingWithText {
+
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
+    progressView.label.text = @"Loading With text";
 }
 
 - (void)showProgressStatusSuccess {

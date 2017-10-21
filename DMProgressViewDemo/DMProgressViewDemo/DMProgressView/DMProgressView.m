@@ -299,7 +299,6 @@
     //Text label
     _label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
-    self.label.text = @"Description";
     self.label.textColor = [UIColor whiteColor];
     self.label.font = [UIFont systemFontOfSize:16.0];
     self.label.textAlignment = NSTextAlignmentCenter;
@@ -322,12 +321,21 @@
         [_indicator startAnimating];
         self.customView = _indicator;
         [_vBackground addSubview:_customView];
+        [_vBackground addSubview:_label];
+        [_vBackground removeConstraints:_vBackground.constraints];
         
         self.customWidth = 34;
         self.customHeight = self.customWidth;
         
+        //custom
         [self configCustomViewContraints];
-        [self updateBgViewWithTopView:_customView bottomView:_customView];
+        
+        //label
+        [self configLabelConstraints];
+        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
+        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_customView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+        
+        [self updateBgViewWithTopView:_customView bottomView:_label];
         
     } else if (_mode == DMProgressViewModeProgress) {
     
@@ -426,7 +434,7 @@
     
     //获取比较宽的子视图
     UIView *maxWidthView = topView.bounds.size.width > bottomView.bounds.size.width ? topView : bottomView;
-
+    NSLog(@"%f-%f", topView.bounds.size.width, bottomView.bounds.size.width);
     //根据子视图自适应父视图
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-padding]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:padding]];

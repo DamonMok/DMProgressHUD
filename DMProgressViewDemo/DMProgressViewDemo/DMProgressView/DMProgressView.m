@@ -25,6 +25,7 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
+@property (nonatomic, strong) CAShapeLayer *cycleLayer;
 @property (nonatomic, strong) CAShapeLayer *progressLayer;
 
 @property (nonatomic, assign) CGFloat customWidth;
@@ -69,8 +70,15 @@
     CGPoint center = CGPointMake(_customWidth*0.5, _customHeight*0.5);
     CGFloat radius = _customWidth*0.5;
     
+    //default cycle layer
+    UIBezierPath *cyclePath = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*1 clockwise:YES];
+    self.cycleLayer.path = [cyclePath CGPath];
+    
+    //progress cycle layer
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
     self.progressLayer.path = [path CGPath];
+    
+    
     
 //    self.labProcess.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
 //    self.labProcess.center = center;
@@ -314,10 +322,16 @@
     _indicator.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Progress
+    _cycleLayer = [[CAShapeLayer alloc] init];
+    _cycleLayer.lineWidth = 3.0;
+    _cycleLayer.strokeColor = [[UIColor lightGrayColor] CGColor];
+    _cycleLayer.fillColor = [[UIColor clearColor] CGColor];
+    
     _progressLayer = [[CAShapeLayer alloc] init];
-    _progressLayer.lineWidth = 2.0;
+    _progressLayer.lineWidth = 3.0;
     _progressLayer.strokeColor = [[UIColor whiteColor] CGColor];
     _progressLayer.fillColor = [[UIColor clearColor] CGColor];
+    _progressLayer.lineCap = @"round";
 }
 
 //Update contraints
@@ -346,6 +360,7 @@
     } else if (_mode == DMProgressViewModeProgress) {
     
         self.customView = [[UIView alloc] init];
+        [_customView.layer addSublayer:_cycleLayer];
         [_customView.layer addSublayer:_progressLayer];
         [_vBackground addSubview:_customView];
         

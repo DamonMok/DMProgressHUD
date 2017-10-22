@@ -21,6 +21,12 @@ typedef NS_ENUM(NSInteger, DMProgressViewMode) {
     DMProgressViewModeCustom
 };
 
+typedef NS_ENUM(NSInteger, DMProgressViewLoadingType) {
+
+    DMProgressViewLoadingTypeIndicator,
+    DMProgressViewLoadingTypeCircle
+};
+
 typedef NS_ENUM(NSInteger, DMProgressViewStatusType) {
 
     DMProgressViewStatusTypeSuccess,
@@ -46,6 +52,8 @@ typedef NS_ENUM(NSInteger, DMProgressViewProgressType) {
 @property (nonatomic, assign) DMProgressViewStatusType statusType;
 
 @property (nonatomic, assign) DMProgressViewProgressType progressType;
+
+@property (nonatomic, assign) DMProgressViewLoadingType loadingType;
 
 @property (nonatomic, assign) CGFloat progress;
 

@@ -36,7 +36,7 @@
     
     if (!_arrData) {
     
-        NSArray *arrLoading = @[@"Loading", @"Loading-带文字"];
+        NSArray *arrLoading = @[@"Indicator", @"Indicator-带文字", @"circle", @"circle-带文字"];
         NSArray *arrProgress = @[@"Circle", @"Circel-带文字", @"Sector", @"Sector-带文字"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
         NSArray *arrText = @[@"【重构】纯文字提示"];
@@ -104,10 +104,16 @@
     if (indexPath.section == 0) {
         switch (indexPath.row) {
             case 0:
-                [self showProgressLoading];
+                [self showProgressLoadingTypeIndicator];
                 break;
             case 1:
-                [self showProgressLoadingWithText];
+                [self showProgressLoadingTypeIndicatorWithText];
+                break;
+            case 2:
+                [self showProgressLoadingTypeCircle];
+                break;
+            case 3:
+                [self showProgressLoadingTypeCircleWithText];
                 break;
                 
             default:
@@ -205,24 +211,80 @@
 
 
 #warning recode
-- (void)showProgressLoading {
+- (void)showProgressLoadingTypeIndicator {
 
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeLoading;
-    progressView.label.text = @"";
+    //progressView.insets = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
 }
 
-- (void)showProgressLoadingWithText {
+- (void)showProgressLoadingTypeIndicatorWithText {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeLoading;
-    progressView.label.text = @"Loading With text";
+    progressView.label.text = @"Loading...";
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
+}
+
+- (void)showProgressLoadingTypeCircle {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
+    progressView.loadingType = DMProgressViewLoadingTypeCircle;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
+}
+
+- (void)showProgressLoadingTypeCircleWithText {
+    
+    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
+    progressView.mode = DMProgressViewModeLoading;
+    progressView.loadingType = DMProgressViewLoadingTypeCircle;
+    progressView.label.text = @"Loading...";
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
 }
 
 - (void)showProgressTypeCircle {
     
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
     progressView.mode = DMProgressViewModeProgress;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         [self doSomething];
@@ -325,6 +387,16 @@
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     [progressView setCustomView:view width:80 height:80];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
 }
 
 - (void)showProgressCustomWithText {
@@ -336,6 +408,16 @@
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     [progressView setCustomView:view width:80 height:80];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        [self doSomething];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [progressView dismiss];
+        });
+    });
 }
 
 - (void)doSomething {

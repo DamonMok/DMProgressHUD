@@ -32,6 +32,8 @@
 @property (nonatomic, assign) CGFloat customWidth;
 @property (nonatomic, assign) CGFloat customHeight;
 
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation DMProgressView
@@ -67,12 +69,12 @@
     
     self.backgroundColor = [UIColor clearColor];
     self.alpha = 0;
+    _insets = UIEdgeInsetsMake(20, 26, 20, 26);
     self.customWidth = 22;
     self.customHeight = 22;
-    self.insets = UIEdgeInsetsMake(20, 26, 20, 26);
     
     [self p_setUpConponents];
-    [self p_updateConstraints];
+    [self p_configConstraints];
 }
 
 //Set up all of the conponents
@@ -81,15 +83,14 @@
     //Background view
     self.vBackground = [[UIView alloc] init];
     self.vBackground.translatesAutoresizingMaskIntoConstraints = NO;
-    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.6];
+    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8];
     self.vBackground.layer.cornerRadius = 5;
     self.vBackground.layer.masksToBounds = YES;
     [self addSubview:self.vBackground];
     
     //Custom view
-    _customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_status_success_22x22_"]];
+    _customView = nil;
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
-    
     
     //Text label
     _label = [[UILabel alloc] init];
@@ -123,6 +124,10 @@
     _labProgress.font = [UIFont systemFontOfSize:14.0];
     _labProgress.textAlignment = NSTextAlignmentCenter;
     [_labProgress sizeToFit];
+    
+    //default mode
+    _customView = _indicator;
+    self.loadingType = DMProgressViewLoadingTypeIndicator;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -144,7 +149,7 @@
     } else if (_progressType == DMProgressViewProgressTypeSector) {
         
         _layerCircle.lineWidth = 1;
-        _layerCircle.strokeColor = [[UIColor whiteColor] CGColor];
+        _layerCircle.strokeColor = [[UIColor colorWithWhite:1.0 alpha:0.8] CGColor];
         _layerProgress.lineWidth = 1;
         _layerProgress.fillColor = [[UIColor whiteColor] CGColor];
         [detailPath moveToPoint:center];
@@ -166,27 +171,25 @@
 }
 
 #pragma mark - Constraints
-- (void)p_updateConstraints {
+- (void)p_configConstraints {
     
     if (_mode == DMProgressViewModeLoading) {
         
-        [_indicator startAnimating];
-        self.customView = _indicator;
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
         [_vBackground removeConstraints:_vBackground.constraints];
         
-        self.customWidth = 34;
+        self.customWidth = 32;
         self.customHeight = self.customWidth;
         
         //custom
-        [self configCustomViewContraints];
+        [self p_configCustomViewContraints];
         
         //label
-        [self configLabelConstraintsWithTopView:_customView];
+        [self p_configLabelConstraintsWithTopView:_customView];
         
         
-        [self updateBgViewWithTopView:_customView bottomView:_label];
+        [self p_configBgViewWithTopView:_customView bottomView:_label];
         
     } else if (_mode == DMProgressViewModeProgress) {
     
@@ -200,12 +203,12 @@
         self.customHeight = self.customWidth;
         
         //custom
-        [self configCustomViewContraints];
+        [self p_configCustomViewContraints];
         
         //label
-        [self configLabelConstraintsWithTopView:_customView];
+        [self p_configLabelConstraintsWithTopView:_customView];
         
-        [self updateBgViewWithTopView:_customView bottomView:_label];
+        [self p_configBgViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeCustom) {
     
@@ -215,12 +218,12 @@
         [_customView removeConstraints:_customView.constraints];
         
         //custom
-        [self configCustomViewContraints];
+        [self p_configCustomViewContraints];
         
         //label
-        [self configLabelConstraintsWithTopView:_customView];
+        [self p_configLabelConstraintsWithTopView:_customView];
         
-        [self updateBgViewWithTopView:_customView bottomView:_label];
+        [self p_configBgViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressViewModeText) {
     
@@ -228,8 +231,8 @@
         [_vBackground addSubview:_label];
         [_customView removeFromSuperview];
         
-        [self configLabelConstraintsWithTopView:nil];
-        [self updateBgViewWithTopView:_label bottomView:_label];
+        [self p_configLabelConstraintsWithTopView:nil];
+        [self p_configBgViewWithTopView:_label bottomView:_label];
     }
 }
 
@@ -242,7 +245,7 @@
         
     } completion:^(BOOL finished) {
         
-        if (_mode != DMProgressViewModeProgress) {
+        if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeText) {
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
@@ -253,18 +256,23 @@
 }
 
 - (void)dismiss {
-
+    
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         
         self.alpha = 0;
     } completion:^(BOOL finished) {
+        
+        if (self.timer) {
+            [self.timer invalidate];
+            self.timer = nil;
+        }
         
         [self removeFromSuperview];
     }];
 }
 
 //自定义视图(CustomView)约束
-- (void)configCustomViewContraints {
+- (void)p_configCustomViewContraints {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
@@ -279,7 +287,7 @@
 }
 
 //约束Label视图
-- (void)configLabelConstraintsWithTopView:(UIView *)topView {
+- (void)p_configLabelConstraintsWithTopView:(UIView *)topView {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
@@ -300,7 +308,7 @@
 }
 
 //适应内容视图(_vBackground)
-- (void)updateBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
+- (void)p_configBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
     
     //最大宽高约束
     NSMutableArray *bgConstraints = [NSMutableArray new];
@@ -310,7 +318,6 @@
     
     //获取比较宽的子视图
     UIView *maxWidthView = topView.bounds.size.width > bottomView.bounds.size.width ? topView : bottomView;
-    NSLog(@"%f-%f", topView.bounds.size.width, bottomView.bounds.size.width);
     //根据子视图自适应父视图
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-_insets.top]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:_insets.bottom]];
@@ -343,7 +350,7 @@
     
     _mode = mode;
     
-    [self p_updateConstraints];
+    [self p_configConstraints];
 }
 
 - (void)setStatusType:(DMProgressViewStatusType)statusType {
@@ -359,30 +366,52 @@
     
     if (statusType == DMProgressViewStatusTypeSuccess) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_success_22x22_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_success_22x22_"];
         
     } else if (statusType == DMProgressViewStatusTypeFail) {
     
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_fail_24x24_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_fail_24x24_"];
         
     } else if (statusType == DMProgressViewStatusTypeWarning) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_status_warning_48x48_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_warning_32x28_"];
     }
     
-    [self p_updateConstraints];
+    [self p_configConstraints];
+}
+
+- (void)setLoadingType:(DMProgressViewLoadingType)loadingType {
+
+    _loadingType = loadingType;
+    
+    if (_loadingType == DMProgressViewLoadingTypeIndicator) {
+        
+        [_indicator startAnimating];
+        self.customView = _indicator;
+        
+    } else if (_loadingType == DMProgressViewLoadingTypeCircle) {
+    
+        self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_loading_32x32_"]];
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(p_showLoadingAnimation) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:UITrackingRunLoopMode];
+    }
+    
+    [self p_configConstraints];
 }
 
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
+    if (_mode != DMProgressViewModeCustom) return;
+    
     self.customWidth = width;
     self.customHeight = height;
     
     self.customView = view;
     [self addSubview:_customView];
     
-    [self p_updateConstraints];
+    [self p_configConstraints];
     
 }
 
@@ -419,13 +448,27 @@
     _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
 }
 
+//限制内边距
+- (void)setInsets:(UIEdgeInsets)insets {
+
+    _insets = insets;
+    
+    [self p_configConstraints];
+}
+
+
+- (void)p_showLoadingAnimation {
+
+    _customView.transform = CGAffineTransformRotate(_customView.transform, 0.0006);
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
 
     if ([keyPath isEqualToString:@"text"]) {
         
         [_label sizeToFit];
         
-        [self p_updateConstraints];
+        [self p_configConstraints];
     }
 }
 

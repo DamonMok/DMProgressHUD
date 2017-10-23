@@ -1,8 +1,8 @@
 //
 //  ViewController.h
-//  DMProgressViewDemo
+//  DMProgressHUD
 //
-//  Created by Damon on 2017/9/1.
+//  Created by Damon on 2017/10/23.
 //  Copyright © 2017年 damon. All rights reserved.
 //
 

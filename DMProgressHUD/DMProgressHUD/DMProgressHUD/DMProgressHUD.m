@@ -1,16 +1,16 @@
 //
-//  DMProgressView.m
-//  DMProgressViewDemo
+//  DMProgressHUD.m
+//  DMProgressHUDDemo
 //
 //  Created by Damon on 2017/9/1.
 //  Copyright © 2017年 damon. All rights reserved.
 //
 
-#import "DMProgressView.h"
+#import "DMProgressHUD.h"
 
 #define margin 20
 
-@interface DMProgressView ()
+@interface DMProgressHUD ()
 
 @property (nonatomic, strong) UIView *vBackground;
 
@@ -27,17 +27,17 @@
 
 @end
 
-@implementation DMProgressView
+@implementation DMProgressHUD
 
 #pragma mark - Life cycle
 + (instancetype)showProgressViewAddedTo:(UIView *)view {
 
-    DMProgressView *progressView = [[self alloc] p_initWithView:view];
-    [view addSubview:progressView];
+    DMProgressHUD *hud = [[self alloc] p_initWithView:view];
+    [view addSubview:hud];
     
-    [progressView p_show];
+    [hud p_show];
     
-    return progressView;
+    return hud;
 }
 
 - (id)p_initWithView:(UIView *)view {
@@ -119,7 +119,7 @@
     
     //default mode
     _customView = _indicator;
-    self.loadingType = DMProgressViewLoadingTypeIndicator;
+    self.loadingType = DMProgressHUDLoadingTypeIndicator;
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -134,11 +134,11 @@
     //progress detail layer
     UIBezierPath *detailPath = [UIBezierPath bezierPath];
     
-    if (_progressType == DMProgressViewProgressTypeCircle) {
+    if (_progressType == DMProgressHUDProgressTypeCircle) {
         
         [detailPath addArcWithCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
         
-    } else if (_progressType == DMProgressViewProgressTypeSector) {
+    } else if (_progressType == DMProgressHUDProgressTypeSector) {
         
         _layerCircle.lineWidth = 1;
         _layerCircle.strokeColor = [[UIColor colorWithWhite:1.0 alpha:0.8] CGColor];
@@ -165,7 +165,7 @@
 #pragma mark - Constraints
 - (void)p_configConstraints {
     
-    if (_mode == DMProgressViewModeLoading) {
+    if (_mode == DMProgressHUDModeLoading) {
         
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
@@ -183,7 +183,7 @@
         
         [self p_configBgViewWithTopView:_customView bottomView:_label];
         
-    } else if (_mode == DMProgressViewModeProgress) {
+    } else if (_mode == DMProgressHUDModeProgress) {
     
         self.customView = [[UIView alloc] init];
         [_customView.layer addSublayer:_layerCircle];
@@ -202,7 +202,7 @@
         
         [self p_configBgViewWithTopView:_customView bottomView:_label];
     
-    } else if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeCustom) {
+    } else if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeCustom) {
     
         [_vBackground addSubview:_customView];
         [_vBackground addSubview:_label];
@@ -217,7 +217,7 @@
         
         [self p_configBgViewWithTopView:_customView bottomView:_label];
     
-    } else if (_mode == DMProgressViewModeText) {
+    } else if (_mode == DMProgressHUDModeText) {
     
         //label
         [_vBackground addSubview:_label];
@@ -237,7 +237,7 @@
         
     } completion:^(BOOL finished) {
         
-        if (_mode == DMProgressViewModeStatus || _mode == DMProgressViewModeText) {
+        if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 
@@ -322,7 +322,7 @@
     
 }
 
-+ (DMProgressView *)progressViewForView:(UIView *)view {
++ (DMProgressHUD *)progressViewForView:(UIView *)view {
 
     NSEnumerator *subViewsEnumerator = [view.subviews reverseObjectEnumerator];
     
@@ -330,7 +330,7 @@
         
         if ([subView isKindOfClass:self]) {
             
-            return (DMProgressView *)subView;
+            return (DMProgressHUD *)subView;
         }
     }
     
@@ -338,14 +338,14 @@
 }
 
 #pragma mark - Setter
-- (void)setMode:(DMProgressViewMode)mode {
+- (void)setMode:(DMProgressHUDMode)mode {
     
     _mode = mode;
     
     [self p_configConstraints];
 }
 
-- (void)setStatusType:(DMProgressViewStatusType)statusType {
+- (void)setStatusType:(DMProgressHUDStatusType)statusType {
 
     _statusType = statusType;
     
@@ -356,15 +356,15 @@
     self.customView = [[UIImageView alloc] init];
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    if (statusType == DMProgressViewStatusTypeSuccess) {
+    if (statusType == DMProgressHUDStatusTypeSuccess) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_success_22x22_"];
         
-    } else if (statusType == DMProgressViewStatusTypeFail) {
+    } else if (statusType == DMProgressHUDStatusTypeFail) {
     
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_fail_24x24_"];
         
-    } else if (statusType == DMProgressViewStatusTypeWarning) {
+    } else if (statusType == DMProgressHUDStatusTypeWarning) {
         
         ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_warning_32x28_"];
     }
@@ -372,16 +372,16 @@
     [self p_configConstraints];
 }
 
-- (void)setLoadingType:(DMProgressViewLoadingType)loadingType {
+- (void)setLoadingType:(DMProgressHUDLoadingType)loadingType {
 
     _loadingType = loadingType;
     
-    if (_loadingType == DMProgressViewLoadingTypeIndicator) {
+    if (_loadingType == DMProgressHUDLoadingTypeIndicator) {
         
         [_indicator startAnimating];
         self.customView = _indicator;
         
-    } else if (_loadingType == DMProgressViewLoadingTypeCircle) {
+    } else if (_loadingType == DMProgressHUDLoadingTypeCircle) {
     
         self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_loading_32x32_"]];
         
@@ -395,7 +395,7 @@
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
-    if (_mode != DMProgressViewModeCustom) return;
+    if (_mode != DMProgressHUDModeCustom) return;
     
     self.customWidth = width;
     self.customHeight = height;

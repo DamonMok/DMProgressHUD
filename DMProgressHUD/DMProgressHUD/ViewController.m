@@ -1,13 +1,13 @@
 //
 //  ViewController.m
-//  DMProgressViewDemo
+//  DMProgressHUD
 //
-//  Created by Damon on 2017/9/1.
+//  Created by Damon on 2017/10/23.
 //  Copyright © 2017年 damon. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "DMProgressView.h"
+#import "DMProgressHUD.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -35,7 +35,7 @@
 - (NSMutableArray *)arrData {
     
     if (!_arrData) {
-    
+        
         NSArray *arrLoading = @[@"Indicator", @"Indicator-带文字", @"circle", @"circle-带文字"];
         NSArray *arrProgress = @[@"Circle", @"Circel-带文字", @"Sector", @"Sector-带文字"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
@@ -63,7 +63,7 @@
 
 #pragma mark - tableView dataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
+    
     return self.arrData.count;
 }
 
@@ -156,7 +156,7 @@
                 break;
         }
     } else if (indexPath.section == 3) {
-    
+        
         switch (indexPath.row) {
             case 0:
                 [self showProgressText];
@@ -166,7 +166,7 @@
                 break;
         }
     } else if (indexPath.section == 4) {
-    
+        
         switch (indexPath.row) {
             case 0:
                 [self showProgressCustom];
@@ -183,16 +183,16 @@
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-
+    
     switch (section) {
         case 0:
-        return @"Loading";
-        break;
+            return @"Loading";
+            break;
             
         case 1:
             return @"Progress";
             break;
-        
+            
         case 2:
             return @"Status";
             break;
@@ -211,9 +211,9 @@
 
 
 - (void)showProgressLoadingTypeIndicator {
-
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
+    
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeLoading;
     //progressView.insets = UIEdgeInsetsMake(0, 0, 0, 0);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -222,16 +222,16 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressLoadingTypeIndicatorWithText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
-    progressView.label.text = @"Loading...";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeLoading;
+    hud.label.text = @"Loading...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -239,16 +239,16 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressLoadingTypeCircle {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
-    progressView.loadingType = DMProgressViewLoadingTypeCircle;
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeLoading;
+    hud.loadingType = DMProgressHUDLoadingTypeCircle;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -256,17 +256,17 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressLoadingTypeCircleWithText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeLoading;
-    progressView.loadingType = DMProgressViewLoadingTypeCircle;
-    progressView.label.text = @"Loading...";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeLoading;
+    hud.loadingType = DMProgressHUDLoadingTypeCircle;
+    hud.label.text = @"Loading...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -274,15 +274,15 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressTypeCircle {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeProgress;
+    DMProgressHUD *hud= [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeProgress;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -290,16 +290,16 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressTypeCircleWithText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeProgress;
-    progressView.label.text = @"Loading...";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeProgress;
+    hud.label.text = @"Loading...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -307,16 +307,16 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressTypeSector {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeProgress;
-    progressView.progressType = DMProgressViewProgressTypeSector;
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeProgress;
+    hud.progressType = DMProgressHUDProgressTypeSector;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -324,17 +324,17 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressTypeSectorWithText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeProgress;
-    progressView.progressType = DMProgressViewProgressTypeSector;
-    progressView.label.text = @"Loading...";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeProgress;
+    hud.progressType = DMProgressHUDProgressTypeSector;
+    hud.label.text = @"Loading...";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -342,50 +342,50 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressStatusSuccess {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeStatus;
-    progressView.statusType = DMProgressViewStatusTypeSuccess;
-    progressView.label.text = @"Success status";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeStatus;
+    hud.statusType = DMProgressHUDStatusTypeSuccess;
+    hud.label.text = @"Success status";
 }
 
 - (void)showProgressStatusFail {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeStatus;
-    progressView.statusType = DMProgressViewStatusTypeFail;
-    progressView.label.text = @"Fail status";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeStatus;
+    hud.statusType = DMProgressHUDStatusTypeFail;
+    hud.label.text = @"Fail status";
 }
 
 - (void)showProgressStatusWarning {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeStatus;
-    progressView.statusType = DMProgressViewStatusTypeWarning;
-    progressView.label.text = @"Warning status";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeStatus;
+    hud.statusType = DMProgressHUDStatusTypeWarning;
+    hud.label.text = @"Warning status";
 }
 
 - (void)showProgressText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeText;
-    progressView.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeText;
+    hud.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
 }
 
 - (void)showProgressCustom {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeCustom;
-    progressView.label.text = @"";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeCustom;
+    hud.label.text = @"";
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
-    [progressView setCustomView:view width:80 height:80];
+    [hud setCustomView:view width:80 height:80];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -393,20 +393,20 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)showProgressCustomWithText {
     
-    DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];
-    progressView.mode = DMProgressViewModeCustom;
-    progressView.label.text = @"Custom with label";
+    DMProgressHUD *hud = [DMProgressHUD showProgressViewAddedTo:self.view];
+    hud.mode = DMProgressHUDModeCustom;
+    hud.label.text = @"Custom with label";
     
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
-    [progressView setCustomView:view width:80 height:80];
+    [hud setCustomView:view width:80 height:80];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -414,21 +414,21 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [progressView dismiss];
+            [hud dismiss];
         });
     });
 }
 
 - (void)doSomething {
-
+    
     CGFloat progress = 0;
     while (progress < 1) {
         
         progress += 0.01;
         dispatch_async(dispatch_get_main_queue(), ^{
             //refresh progress-value on main thread
-            DMProgressView *progressView = [DMProgressView progressViewForView:self.view];
-            progressView.progress = progress;
+            DMProgressHUD *hud = [DMProgressHUD progressViewForView:self.view];
+            hud.progress = progress;
         });
         [NSThread sleepForTimeInterval:0.01];
     }

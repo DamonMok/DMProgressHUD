@@ -30,7 +30,7 @@
 @implementation DMProgressHUD
 
 #pragma mark - Life cycle
-+ (instancetype)showProgressViewAddedTo:(UIView *)view {
++ (instancetype)showProgressHUDAddedTo:(UIView *)view {
 
     DMProgressHUD *hud = [[self alloc] p_initWithView:view];
     [view addSubview:hud];
@@ -322,7 +322,7 @@
     
 }
 
-+ (DMProgressHUD *)progressViewForView:(UIView *)view {
++ (DMProgressHUD *)progressHUDForView:(UIView *)view {
 
     NSEnumerator *subViewsEnumerator = [view.subviews reverseObjectEnumerator];
     
@@ -386,7 +386,7 @@
         self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_loading_32x32_"]];
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(p_showLoadingAnimation) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:UITrackingRunLoopMode];
+        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
     }
     
     [self p_configConstraints];

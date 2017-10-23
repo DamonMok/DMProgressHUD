@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
 
 @property (nonatomic, assign) UIEdgeInsets insets;
 
-+ (instancetype)showProgressViewAddedTo:(UIView *)view;
++ (instancetype)showProgressHUDAddedTo:(UIView *)view;
 
 - (void)dismiss;
 
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
 
-//get current progressView
-+ (DMProgressHUD *)progressViewForView:(UIView *)view;
+//get current progressHUD
++ (DMProgressHUD *)progressHUDForView:(UIView *)view;
 
 @end

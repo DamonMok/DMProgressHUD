@@ -120,11 +120,11 @@
 		E4449D171F9E17A3009F396F /* DMProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
+				E4449D4B1F9E17E3009F396F /* DMProgressHUD */,
 				E4449D1B1F9E17A3009F396F /* AppDelegate.h */,
 				E4449D1C1F9E17A3009F396F /* AppDelegate.m */,
 				E4449D1E1F9E17A3009F396F /* ViewController.h */,
 				E4449D1F1F9E17A3009F396F /* ViewController.m */,
-				E4449D4B1F9E17E3009F396F /* DMProgressHUD */,
 				E4449D211F9E17A3009F396F /* Main.storyboard */,
 				E4449D241F9E17A3009F396F /* Assets.xcassets */,
 				E4449D261F9E17A3009F396F /* LaunchScreen.storyboard */,
@@ -561,6 +561,7 @@
 				E4449D441F9E17A3009F396F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4449D451F9E17A3009F396F /* Build configuration list for PBXNativeTarget "DMProgressHUDTests" */ = {
 			isa = XCConfigurationList;
@@ -569,6 +570,7 @@
 				E4449D471F9E17A3009F396F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4449D481F9E17A3009F396F /* Build configuration list for PBXNativeTarget "DMProgressHUDUITests" */ = {
 			isa = XCConfigurationList;
@@ -577,6 +579,7 @@
 				E4449D4A1F9E17A3009F396F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

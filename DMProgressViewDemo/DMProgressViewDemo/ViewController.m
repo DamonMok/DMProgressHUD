@@ -210,7 +210,6 @@
 }
 
 
-#warning recode
 - (void)showProgressLoadingTypeIndicator {
 
     DMProgressView *progressView = [DMProgressView showProgressViewAddedTo:self.view];

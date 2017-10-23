@@ -12,15 +12,6 @@
 
 @interface DMProgressView ()
 
-//进度圈View
-@property (nonatomic, strong)CAShapeLayer *processLayer;
-@property (nonatomic, strong)UILabel *labProcess;
-
-//加载中loadingView
-@property (nonatomic, strong)UIActivityIndicatorView *activityIndicatorView;
-@property (nonatomic, strong)UILabel *labLoading;
-
-#warning recode
 @property (nonatomic, strong) UIView *vBackground;
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
@@ -68,10 +59,11 @@
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
+    //self.userInteractionEnabled = NO;
     self.alpha = 0;
-    _insets = UIEdgeInsetsMake(20, 26, 20, 26);
     self.customWidth = 22;
     self.customHeight = 22;
+    _insets = UIEdgeInsetsMake(20, 26, 20, 26);
     
     [self p_setUpConponents];
     [self p_configConstraints];

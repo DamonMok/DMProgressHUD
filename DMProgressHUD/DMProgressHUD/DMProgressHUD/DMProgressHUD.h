@@ -44,6 +44,14 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
     DMProgressHUDProgressTypeSector
 };
 
+typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
+
+    DMProgressHUDAnimationDefault,
+    
+    DMProgressHUDAnimationIncrement,
+
+};
+
 @interface DMProgressHUD : UIView
 
 @property (nonatomic, assign) DMProgressHUDMode mode;
@@ -63,6 +71,8 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
 @property (nonatomic, assign) UIEdgeInsets insets;
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view;
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation;
 
 - (void)dismiss;
 

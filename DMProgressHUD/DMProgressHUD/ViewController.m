@@ -229,7 +229,7 @@
 
 - (void)showProgressLoadingTypeIndicatorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeLoading;
     hud.label.text = @"Loading...";
     
@@ -263,7 +263,7 @@
 
 - (void)showProgressLoadingTypeCircleWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
     hud.label.text = @"Loading...";
@@ -297,7 +297,7 @@
 
 - (void)showProgressTypeCircleWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeProgress;
     hud.label.text = @"Loading...";
     
@@ -331,7 +331,7 @@
 
 - (void)showProgressTypeSectorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
     hud.label.text = @"Loading...";
@@ -357,7 +357,7 @@
 
 - (void)showProgressStatusFail {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
     hud.label.text = @"Fail status";
@@ -400,7 +400,7 @@
 
 - (void)showProgressCustomWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeCustom;
     hud.label.text = @"Custom with label";
     

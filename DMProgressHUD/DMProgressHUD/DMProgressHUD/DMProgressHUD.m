@@ -10,7 +10,9 @@
 
 #define margin 20
 
-@interface DMProgressHUD ()
+#define animationDuration 0.2
+
+@interface DMProgressHUD ()<CAAnimationDelegate>
 
 @property (nonatomic, strong) UIView *vBackground;
 
@@ -25,6 +27,10 @@
 
 @property (nonatomic, strong) NSTimer *timer;
 
+@property (nonatomic, assign) DMProgressHUDAnimation animation;
+
+@property (nonatomic, assign, getter=isShowHUD) BOOL showHUD;
+
 @end
 
 @implementation DMProgressHUD
@@ -32,10 +38,18 @@
 #pragma mark - Life cycle
 + (instancetype)showProgressHUDAddedTo:(UIView *)view {
 
+    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDefault];
+}
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
+
     DMProgressHUD *hud = [[self alloc] p_initWithView:view];
+    
     [view addSubview:hud];
     
-    [hud p_show];
+    [hud p_showAnimation:animation];
+    
+    hud.animation = animation;
     
     return hud;
 }
@@ -59,8 +73,7 @@
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
-    //self.userInteractionEnabled = NO;
-    self.alpha = 0;
+    self.userInteractionEnabled = NO;
     self.customWidth = 22;
     self.customHeight = 22;
     _insets = UIEdgeInsetsMake(20, 26, 20, 26);
@@ -162,6 +175,79 @@
     
 }
 
+//Animation show
+- (void)p_showAnimation:(DMProgressHUDAnimation)animation {
+    
+    _showHUD = YES;
+    
+    if (animation == DMProgressHUDAnimationDefault) {
+        self.alpha = 0;
+        [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+            
+            self.alpha = 1;
+            
+        } completion:^(BOOL finished) {
+            
+            if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    
+                    [self dismiss];
+                });
+            }
+        }];
+        
+    } else if (animation == DMProgressHUDAnimationIncrement) {
+    
+        CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        an.delegate = self;
+        an.duration = animationDuration/2;
+        an.removedOnCompletion = NO;
+        an.calculationMode = kCAAnimationCubicPaced;
+        an.fillMode = kCAFillModeForwards;
+        an.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.5, 0.5, 1)],
+                      [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
+        [self.layer addAnimation:an forKey:nil];
+        
+    }
+    
+}
+
+- (void)dismiss {
+    
+    _showHUD = NO;
+    
+    if (_animation == DMProgressHUDAnimationDefault) {
+        
+        [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+            
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            
+            if (self.timer) {
+                [self.timer invalidate];
+                self.timer = nil;
+            }
+            
+            [self removeFromSuperview];
+        }];
+    } else if (_animation == DMProgressHUDAnimationIncrement) {
+        
+        CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        an.delegate = self;
+        an.duration = animationDuration;
+        an.removedOnCompletion = NO;
+        an.calculationMode = kCAAnimationCubicPaced;
+        an.fillMode = kCAFillModeForwards;
+        an.values = @[
+                      [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)],
+                      
+                      [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.0, 0.0, 1.0)]
+                      ];
+        [self.layer addAnimation:an forKey:nil];
+    }
+}
+
 #pragma mark - Constraints
 - (void)p_configConstraints {
     
@@ -228,40 +314,6 @@
     }
 }
 
-//Animation show
-- (void)p_show {
-
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-        
-        self.alpha = 1;
-        
-    } completion:^(BOOL finished) {
-        
-        if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                
-                [self dismiss];
-            });
-        }
-    }];
-}
-
-- (void)dismiss {
-    
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-        
-        self.alpha = 0;
-    } completion:^(BOOL finished) {
-        
-        if (self.timer) {
-            [self.timer invalidate];
-            self.timer = nil;
-        }
-        
-        [self removeFromSuperview];
-    }];
-}
 
 //自定义视图(CustomView)约束
 - (void)p_configCustomViewContraints {
@@ -422,7 +474,10 @@
     //2%预显示
     //_progress = _progress > 0.02 ? _progress : 0.02;
     
-    [self setNeedsDisplay];
+    if (_mode == DMProgressHUDModeProgress) {
+        
+        [self setNeedsDisplay];
+    }
     
 }
 
@@ -461,6 +516,30 @@
         [_label sizeToFit];
         
         [self p_configConstraints];
+    }
+}
+
+#pragma mark - CAAnimation delegate
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    
+    if (self.isShowHUD) {
+        if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                [self dismiss];
+            });
+        }
+        
+    } else {
+    
+        if (self.timer) {
+            [self.timer invalidate];
+            self.timer = nil;
+        }
+        
+        [self.layer removeAllAnimations];
+        [self removeFromSuperview];
     }
 }
 

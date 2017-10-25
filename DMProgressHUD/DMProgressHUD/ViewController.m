@@ -365,7 +365,7 @@
 
 - (void)showProgressStatusWarning {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.label.text = @"Warning status";

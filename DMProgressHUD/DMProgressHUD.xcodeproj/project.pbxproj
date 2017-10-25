@@ -252,6 +252,7 @@
 				TargetAttributes = {
 					E4449D141F9E17A3009F396F = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = HKJNNXDN5T;
 						ProvisioningStyle = Automatic;
 					};
 					E4449D2D1F9E17A3009F396F = {
@@ -478,7 +479,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HKJNNXDN5T;
 				INFOPLIST_FILE = DMProgressHUD/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.damon.DMProgressHUD;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -489,7 +492,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HKJNNXDN5T;
 				INFOPLIST_FILE = DMProgressHUD/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.damon.DMProgressHUD;
 				PRODUCT_NAME = "$(TARGET_NAME)";

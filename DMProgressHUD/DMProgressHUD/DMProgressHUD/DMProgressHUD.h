@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, DMProgressHUDMode) {
 typedef NS_ENUM(NSInteger, DMProgressHUDLoadingType) {
 
     DMProgressHUDLoadingTypeIndicator,
+    
     DMProgressHUDLoadingTypeCircle
 };
 
@@ -49,6 +50,8 @@ typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
     DMProgressHUDAnimationDefault,
     
     DMProgressHUDAnimationIncrement,
+    
+    DMProgressHUDAnimationSpring
 
 };
 

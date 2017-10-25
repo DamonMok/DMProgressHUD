@@ -197,7 +197,7 @@
             }
         }];
         
-    } else if (animation == DMProgressHUDAnimationIncrement) {
+    } else if (animation == DMProgressHUDAnimationIncrement || animation == DMProgressHUDAnimationSpring) {
     
         CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
         an.delegate = self;
@@ -207,6 +207,15 @@
         an.fillMode = kCAFillModeForwards;
         an.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.5, 0.5, 1)],
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
+        
+        if (animation == DMProgressHUDAnimationSpring) {
+            an.duration = animationDuration+0.1;
+            an.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
+                          [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1, 1.1, 1)],
+                          [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
+                          [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
+        }
+        
         [self.layer addAnimation:an forKey:nil];
         
     }
@@ -231,7 +240,7 @@
             
             [self removeFromSuperview];
         }];
-    } else if (_animation == DMProgressHUDAnimationIncrement) {
+    } else if (_animation == DMProgressHUDAnimationIncrement || _animation == DMProgressHUDAnimationSpring) {
         
         CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
         an.delegate = self;

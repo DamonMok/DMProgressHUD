@@ -40,7 +40,7 @@
 #pragma mark - Life cycle
 + (instancetype)showProgressHUDAddedTo:(UIView *)view {
 
-    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDefault];
+    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve];
 }
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
@@ -179,27 +179,18 @@
     
 }
 
-//Animation show
+#pragma mark - Show
 - (void)p_showAnimation:(DMProgressHUDAnimation)animation {
     
     _showHUD = YES;
     
-    if (animation == DMProgressHUDAnimationDefault) {
+    if (animation == DMProgressHUDAnimationDissolve) {
         self.alpha = 0;
         [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             
             self.alpha = 1;
             
-        } completion:^(BOOL finished) {
-            
-            if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
-                
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    
-                    [self dismiss];
-                });
-            }
-        }];
+        } completion:nil];
         
     } else if (animation == DMProgressHUDAnimationIncrement || animation == DMProgressHUDAnimationSpring) {
     
@@ -226,6 +217,7 @@
     
 }
 
+#pragma mark - Dismiss
 - (void)dismiss {
     
     [self dismissWithCompletion:nil];
@@ -235,7 +227,7 @@
 
     _showHUD = NO;
     
-    if (_animation == DMProgressHUDAnimationDefault) {
+    if (_animation == DMProgressHUDAnimationDissolve) {
         
         [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             
@@ -271,6 +263,22 @@
                       ];
         [self.layer addAnimation:an forKey:nil];
     }
+}
+
+- (void)dismissAfter:(NSTimeInterval)seconds {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self dismiss];
+    });
+}
+
+- (void)dismissAfter:(NSTimeInterval)seconds completion:(DMProgressHUDDismissCompletion)completion {
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self dismissWithCompletion:completion];
+    });
 }
 
 #pragma mark - Constraints
@@ -547,17 +555,9 @@
 #pragma mark - CAAnimation delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     
-    if (self.isShowHUD) {
-        if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeText) {
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                
-                [self dismiss];
-            });
-        }
+    //clean up
+    if (!self.isShowHUD) {
         
-    } else {
-    
         if (self.timer) {
             [self.timer invalidate];
             self.timer = nil;

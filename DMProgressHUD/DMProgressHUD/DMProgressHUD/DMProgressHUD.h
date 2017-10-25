@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
 
 typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
-    DMProgressHUDAnimationDefault,
+    DMProgressHUDAnimationDissolve,
     
     DMProgressHUDAnimationIncrement,
     
@@ -82,6 +82,11 @@ typedef void(^DMProgressHUDDismissCompletion)();
 - (void)dismiss;
 
 - (void)dismissWithCompletion:(DMProgressHUDDismissCompletion)completion;
+
+- (void)dismissAfter:(NSTimeInterval)seconds;
+
+- (void)dismissAfter:(NSTimeInterval)seconds completion:(DMProgressHUDDismissCompletion)completion;
+
 
 
 //custom view

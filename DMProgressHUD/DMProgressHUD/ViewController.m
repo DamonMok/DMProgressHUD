@@ -356,6 +356,10 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeSuccess;
     hud.label.text = @"Success status";
+    [hud dismissAfter:1.0 completion:^{
+        
+        NSLog(@"complete");
+    }];
 }
 
 - (void)showProgressStatusFail {
@@ -364,6 +368,10 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
     hud.label.text = @"Fail status";
+    [hud dismissAfter:1.0 completion:^{
+        
+        NSLog(@"complete");
+    }];
 }
 
 - (void)showProgressStatusWarning {
@@ -372,13 +380,15 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.label.text = @"Warning status";
+    [hud dismissAfter:1.0];
 }
 
 - (void)showProgressText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
     hud.mode = DMProgressHUDModeText;
-    hud.label.text = @"This is your textThis is your textThis is your textThis is your textThis is your text";
+    hud.label.text = @"This is your text";
+    [hud dismissAfter:1.5];
 }
 
 - (void)showProgressCustom {

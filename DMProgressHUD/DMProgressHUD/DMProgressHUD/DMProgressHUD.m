@@ -419,15 +419,15 @@
     
     if (statusType == DMProgressHUDStatusTypeSuccess) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_success_22x22_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_success_22x22_"];
         
     } else if (statusType == DMProgressHUDStatusTypeFail) {
     
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_fail_24x24_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_fail_24x24_"];
         
     } else if (statusType == DMProgressHUDStatusTypeWarning) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"progress_warning_32x28_"];
+        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_warning_32x28_"];
     }
     
     [self p_configConstraints];
@@ -444,7 +444,7 @@
         
     } else if (_loadingType == DMProgressHUDLoadingTypeCircle) {
     
-        self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_loading_32x32_"]];
+        self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DMProgressImgs.bundle/progress_loading_32x32_"]];
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(p_showLoadingAnimation) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];

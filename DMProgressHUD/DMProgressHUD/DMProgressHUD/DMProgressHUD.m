@@ -31,6 +31,8 @@
 
 @property (nonatomic, assign, getter=isShowHUD) BOOL showHUD;
 
+@property (nonatomic, copy) DMProgressHUDDismissCompletion dismissCompletion;
+
 @end
 
 @implementation DMProgressHUD
@@ -43,6 +45,8 @@
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
 
+    if (!view) return nil;
+    
     DMProgressHUD *hud = [[self alloc] p_initWithView:view];
     
     [view addSubview:hud];
@@ -224,6 +228,11 @@
 
 - (void)dismiss {
     
+    [self dismissWithCompletion:nil];
+}
+
+- (void)dismissWithCompletion:(DMProgressHUDDismissCompletion)completion {
+
     _showHUD = NO;
     
     if (_animation == DMProgressHUDAnimationDefault) {
@@ -239,8 +248,15 @@
             }
             
             [self removeFromSuperview];
+            
+            if (completion) {
+                completion();
+            }
+            
         }];
     } else if (_animation == DMProgressHUDAnimationIncrement || _animation == DMProgressHUDAnimationSpring) {
+        
+        _dismissCompletion = completion;
         
         CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
         an.delegate = self;
@@ -549,6 +565,10 @@
         
         [self.layer removeAllAnimations];
         [self removeFromSuperview];
+        
+        if (_dismissCompletion) {
+            _dismissCompletion();
+        }
     }
 }
 

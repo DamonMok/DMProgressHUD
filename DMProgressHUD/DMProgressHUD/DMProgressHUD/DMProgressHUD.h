@@ -55,6 +55,8 @@ typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
 };
 
+typedef void(^DMProgressHUDDismissCompletion)();
+
 @interface DMProgressHUD : UIView
 
 @property (nonatomic, assign) DMProgressHUDMode mode;
@@ -79,11 +81,19 @@ typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
 - (void)dismiss;
 
+- (void)dismissWithCompletion:(DMProgressHUDDismissCompletion)completion;
+
 
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
 
 //get current progressHUD
 + (DMProgressHUD *)progressHUDForView:(UIView *)view;
+
+@end
+
+@interface DMProgressHUD (initialization)
+
+- (instancetype)init __attribute__((unavailable("Please use the initialization method provided by DMProgressHUD")));
 
 @end

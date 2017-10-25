@@ -222,7 +222,10 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [hud dismiss];
+            [hud dismissWithCompletion:^{
+                
+                NSLog(@"dismissCompletion");
+            }];
         });
     });
 }

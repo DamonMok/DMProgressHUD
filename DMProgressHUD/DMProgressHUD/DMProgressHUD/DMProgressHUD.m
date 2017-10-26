@@ -35,6 +35,8 @@
 
 @property (nonatomic, copy) DMProgressHUDDismissCompletion dismissCompletion;
 
+@property (nonatomic, copy) DMProgressHUDMaskTapHandle maskTapHandle;
+
 @end
 
 @implementation DMProgressHUD
@@ -50,13 +52,24 @@
     return [self showProgressHUDAddedTo:view animation:animation maskType:DMProgressHUDMaskTypeNone];
 }
 
++ (instancetype)showProgressHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType {
+
+    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:maskType];
+}
+
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType {
+
+    return [self showProgressHUDAddedTo:view animation:animation maskType:maskType maskTapHandle:nil];
+}
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle {
 
     if (!view) return nil;
     
     DMProgressHUD *hud = [[self alloc] p_initWithView:view];
     hud.animation = animation;
     hud.maskType = maskType;
+    hud.maskTapHandle = maskTapHandle;
     
     [view addSubview:hud];
     
@@ -606,13 +619,21 @@
             self.timer = nil;
         }
         
-        [self.layer removeAllAnimations];
+        [self.vBackground.layer removeAllAnimations];
         [self removeFromSuperview];
         
         if (_dismissCompletion) {
             _dismissCompletion();
         }
     }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+
+    if (self.maskTapHandle) {
+        self.maskTapHandle(self);
+    }
+    
 }
 
 

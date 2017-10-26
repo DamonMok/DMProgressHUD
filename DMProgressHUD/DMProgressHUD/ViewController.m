@@ -232,7 +232,7 @@
 
 - (void)showProgressLoadingTypeIndicatorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement maskType:DMProgressHUDMaskTypeClear];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
     hud.mode = DMProgressHUDModeLoading;
     hud.label.text = @"Loading...";
     
@@ -284,7 +284,7 @@
 
 - (void)showProgressTypeCircle {
     
-    DMProgressHUD *hud= [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud= [DMProgressHUD showProgressHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
     hud.mode = DMProgressHUDModeProgress;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -376,11 +376,16 @@
 
 - (void)showProgressStatusWarning {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring maskType:DMProgressHUDMaskTypeGray maskTapHandle:^(DMProgressHUD *hud) {
+        
+        [hud dismissWithCompletion:^{
+            
+            NSLog(@"dismiss complete");
+        }];
+    }];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.label.text = @"Warning status";
-    [hud dismissAfter:1.0];
 }
 
 - (void)showProgressText {
@@ -388,7 +393,7 @@
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
     hud.mode = DMProgressHUDModeText;
     hud.label.text = @"This is your text";
-    [hud dismissAfter:1.5];
+    [hud dismissAfter:1.0];
 }
 
 - (void)showProgressCustom {

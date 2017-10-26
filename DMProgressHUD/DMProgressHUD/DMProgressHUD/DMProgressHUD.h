@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class DMProgressHUD;
+
 typedef NS_ENUM(NSInteger, DMProgressHUDMode) {
 
     DMProgressHUDModeLoading,
@@ -66,6 +68,8 @@ typedef NS_ENUM(NSInteger, DMProgressHUDMaskType) {
 
 typedef void(^DMProgressHUDDismissCompletion)();
 
+typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
+
 @interface DMProgressHUD : UIView
 
 @property (nonatomic, assign) DMProgressHUDMode mode;
@@ -89,7 +93,11 @@ typedef void(^DMProgressHUDDismissCompletion)();
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation;
 
++ (instancetype)showProgressHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType;
+
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType;
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle;
 
 - (void)dismiss;
 

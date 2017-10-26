@@ -101,7 +101,7 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 
 - (void)dismiss;
 
-- (void)dismissWithCompletion:(DMProgressHUDDismissCompletion)completion;
+- (void)dismissCompletion:(DMProgressHUDDismissCompletion)completion;
 
 - (void)dismissAfter:(NSTimeInterval)seconds;
 

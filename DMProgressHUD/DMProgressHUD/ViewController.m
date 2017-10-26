@@ -222,7 +222,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [hud dismissWithCompletion:^{
+            [hud dismissCompletion:^{
                 
                 NSLog(@"dismissCompletion");
             }];
@@ -378,7 +378,7 @@
     
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring maskType:DMProgressHUDMaskTypeGray maskTapHandle:^(DMProgressHUD *hud) {
         
-        [hud dismissWithCompletion:^{
+        [hud dismissCompletion:^{
             
             NSLog(@"dismiss complete");
         }];

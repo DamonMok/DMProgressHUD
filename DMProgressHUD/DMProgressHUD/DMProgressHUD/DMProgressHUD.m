@@ -249,10 +249,10 @@
 #pragma mark - Dismiss
 - (void)dismiss {
     
-    [self dismissWithCompletion:nil];
+    [self dismissCompletion:nil];
 }
 
-- (void)dismissWithCompletion:(DMProgressHUDDismissCompletion)completion {
+- (void)dismissCompletion:(DMProgressHUDDismissCompletion)completion {
 
     _showHUD = NO;
     
@@ -317,7 +317,7 @@
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(seconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        [self dismissWithCompletion:completion];
+        [self dismissCompletion:completion];
     });
 }
 
@@ -628,6 +628,7 @@
     }
 }
 
+#pragma mark - touch delegate
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
     if (self.maskTapHandle) {

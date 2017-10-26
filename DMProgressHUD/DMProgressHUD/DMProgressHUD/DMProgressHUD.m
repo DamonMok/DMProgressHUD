@@ -29,6 +29,8 @@
 
 @property (nonatomic, assign) DMProgressHUDAnimation animation;
 
+@property (nonatomic, assign) DMProgressHUDMaskType maskType;
+
 @property (nonatomic, assign, getter=isShowHUD) BOOL showHUD;
 
 @property (nonatomic, copy) DMProgressHUDDismissCompletion dismissCompletion;
@@ -40,20 +42,25 @@
 #pragma mark - Life cycle
 + (instancetype)showProgressHUDAddedTo:(UIView *)view {
 
-    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve];
+    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:DMProgressHUDMaskTypeNone];
 }
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
 
+    return [self showProgressHUDAddedTo:view animation:animation maskType:DMProgressHUDMaskTypeNone];
+}
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType {
+
     if (!view) return nil;
     
     DMProgressHUD *hud = [[self alloc] p_initWithView:view];
+    hud.animation = animation;
+    hud.maskType = maskType;
     
     [view addSubview:hud];
     
     [hud p_showAnimation:animation];
-    
-    hud.animation = animation;
     
     return hud;
 }
@@ -77,7 +84,6 @@
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
-    self.userInteractionEnabled = NO;
     self.customWidth = 22;
     self.customHeight = 22;
     _insets = UIEdgeInsetsMake(20, 26, 20, 26);
@@ -193,25 +199,35 @@
         } completion:nil];
         
     } else if (animation == DMProgressHUDAnimationIncrement || animation == DMProgressHUDAnimationSpring) {
-    
-        CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-        an.delegate = self;
-        an.duration = animationDuration/2;
-        an.removedOnCompletion = NO;
-        an.calculationMode = kCAAnimationCubicPaced;
-        an.fillMode = kCAFillModeForwards;
-        an.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.5, 0.5, 1)],
+        
+        //transform
+        CAKeyframeAnimation *transformAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        transformAnimation.delegate = self;
+        transformAnimation.duration = animationDuration/2;
+        transformAnimation.removedOnCompletion = NO;
+        transformAnimation.calculationMode = kCAAnimationCubicPaced;
+        transformAnimation.fillMode = kCAFillModeForwards;
+        transformAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.5, 0.5, 1)],
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
         
         if (animation == DMProgressHUDAnimationSpring) {
-            an.duration = animationDuration+0.1;
-            an.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
+            transformAnimation.duration = animationDuration+0.1;
+            transformAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1, 1.1, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
         }
         
-        [self.layer addAnimation:an forKey:nil];
+        //opacity
+        CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        opacityAnimation.duration = transformAnimation.duration;
+        opacityAnimation.removedOnCompletion = NO;
+        opacityAnimation.fillMode = kCAFillModeForwards;
+        opacityAnimation.fromValue = @0;
+        opacityAnimation.toValue = @1;
+        
+        [self.vBackground.layer addAnimation:transformAnimation forKey:nil];
+        [self.layer addAnimation:opacityAnimation forKey:nil];
         
     }
     
@@ -250,18 +266,29 @@
         
         _dismissCompletion = completion;
         
-        CAKeyframeAnimation *an = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-        an.delegate = self;
-        an.duration = animationDuration;
-        an.removedOnCompletion = NO;
-        an.calculationMode = kCAAnimationCubicPaced;
-        an.fillMode = kCAFillModeForwards;
-        an.values = @[
+        //transform
+        CAKeyframeAnimation *transformAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+        transformAnimation.delegate = self;
+        transformAnimation.duration = animationDuration;
+        transformAnimation.removedOnCompletion = NO;
+        transformAnimation.calculationMode = kCAAnimationCubicPaced;
+        transformAnimation.fillMode = kCAFillModeForwards;
+        transformAnimation.values = @[
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)],
                       
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.0, 0.0, 1.0)]
                       ];
-        [self.layer addAnimation:an forKey:nil];
+        
+        //opacity
+        CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        opacityAnimation.duration = transformAnimation.duration;
+        opacityAnimation.removedOnCompletion = NO;
+        opacityAnimation.fillMode = kCAFillModeForwards;
+        opacityAnimation.fromValue = @1;
+        opacityAnimation.toValue = @0;
+        
+        [self.vBackground.layer addAnimation:transformAnimation forKey:nil];
+        [self.layer addAnimation:opacityAnimation forKey:nil];
     }
 }
 
@@ -534,6 +561,22 @@
     _insets = insets;
     
     [self p_configConstraints];
+}
+
+- (void)setMaskType:(DMProgressHUDMaskType)maskType {
+
+    _maskType = maskType;
+    
+    self.userInteractionEnabled = maskType;
+    
+    if (maskType == DMProgressHUDMaskTypeClear) {
+        
+        self.backgroundColor = [UIColor clearColor];
+        
+    } else if (maskType == DMProgressHUDMaskTypeGray) {
+    
+        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    }
 }
 
 

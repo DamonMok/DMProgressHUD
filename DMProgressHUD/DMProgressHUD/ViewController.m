@@ -232,7 +232,7 @@
 
 - (void)showProgressLoadingTypeIndicatorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement maskType:DMProgressHUDMaskTypeClear];
     hud.mode = DMProgressHUDModeLoading;
     hud.label.text = @"Loading...";
     

@@ -55,6 +55,15 @@ typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
 };
 
+typedef NS_ENUM(NSInteger, DMProgressHUDMaskType) {
+
+    DMProgressHUDMaskTypeNone,
+    
+    DMProgressHUDMaskTypeClear,
+    
+    DMProgressHUDMaskTypeGray
+};
+
 typedef void(^DMProgressHUDDismissCompletion)();
 
 @interface DMProgressHUD : UIView
@@ -75,9 +84,12 @@ typedef void(^DMProgressHUDDismissCompletion)();
 
 @property (nonatomic, assign) UIEdgeInsets insets;
 
+
 + (instancetype)showProgressHUDAddedTo:(UIView *)view;
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation;
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType;
 
 - (void)dismiss;
 

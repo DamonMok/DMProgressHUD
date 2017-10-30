@@ -57,6 +57,13 @@ typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
 };
 
+typedef NS_ENUM(NSInteger, DMProgressHUDStyle) {
+    
+    DMProgressHUDStyleDark = 0,
+    
+    DMProgressHUDStyleLight
+};
+
 typedef NS_ENUM(NSInteger, DMProgressHUDMaskType) {
 
     DMProgressHUDMaskTypeNone,
@@ -80,13 +87,15 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 
 @property (nonatomic, assign) DMProgressHUDLoadingType loadingType;
 
+@property (nonatomic, strong, readonly) UILabel *label;
+
 @property (nonatomic, assign) CGFloat progress;
 
 @property (nonatomic, strong) UIView *customView;
 
-@property (nonatomic, strong, readonly) UILabel *label;
-
 @property (nonatomic, assign) UIEdgeInsets insets;
+
+@property (nonatomic, assign) DMProgressHUDStyle style;
 
 
 + (instancetype)showProgressHUDAddedTo:(UIView *)view;

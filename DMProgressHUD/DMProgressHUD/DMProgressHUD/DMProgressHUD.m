@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
+@property (nonatomic, strong) UIImageView *ivIcon;
+
 @property (nonatomic, strong) CAShapeLayer *layerCircle;     //defaule cycle
 @property (nonatomic, strong) CAShapeLayer *layerProgress;  //progress cycle
 @property (nonatomic, strong) UILabel *labProgress;         //progress lable
@@ -148,7 +150,6 @@
     _layerProgress.lineCap = @"round";
     
     _labProgress = [[UILabel alloc] init];
-    _labProgress.textColor = [UIColor whiteColor];
     _labProgress.font = [UIFont systemFontOfSize:14.0];
     _labProgress.textAlignment = NSTextAlignmentCenter;
     [_labProgress sizeToFit];
@@ -170,16 +171,24 @@
     //progress detail layer
     UIBezierPath *detailPath = [UIBezierPath bezierPath];
     
+    UIColor *color = _style == DMProgressHUDStyleLight ? [UIColor blackColor] : [UIColor whiteColor];
+    
     if (_progressType == DMProgressHUDProgressTypeCircle) {
+        
+        _layerProgress.strokeColor = [color CGColor];
+        _labProgress.textColor = color;
         
         [detailPath addArcWithCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
         
     } else if (_progressType == DMProgressHUDProgressTypeSector) {
         
         _layerCircle.lineWidth = 1;
-        _layerCircle.strokeColor = [[UIColor colorWithWhite:1.0 alpha:0.8] CGColor];
         _layerProgress.lineWidth = 1;
-        _layerProgress.fillColor = [[UIColor whiteColor] CGColor];
+        
+        _layerCircle.strokeColor = [[color colorWithAlphaComponent:0.8] CGColor];
+        _layerProgress.strokeColor = [color CGColor];
+        _layerProgress.fillColor = [color CGColor];
+        
         [detailPath moveToPoint:center];
         [detailPath addArcWithCenter:center radius:radius-2 startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*_progress clockwise:YES];
         
@@ -478,21 +487,23 @@
     self.customWidth = 22;
     self.customHeight = self.customWidth;
     
-    self.customView = [[UIImageView alloc] init];
-    _customView.translatesAutoresizingMaskIntoConstraints = NO;
+    _ivIcon = [[UIImageView alloc] init];
+    NSString *lightStyle = _style == DMProgressHUDStyleLight ? @"black_" : @"";
     
     if (statusType == DMProgressHUDStatusTypeSuccess) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_success_22x22_"];
+        _ivIcon.image = [UIImage imageNamed:[NSString stringWithFormat:@"DMProgressImgs.bundle/progress_success_%@22x22_", lightStyle]];
         
     } else if (statusType == DMProgressHUDStatusTypeFail) {
     
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_fail_24x24_"];
+        _ivIcon.image = [UIImage imageNamed:[NSString stringWithFormat:@"DMProgressImgs.bundle/progress_fail_%@24x24_", lightStyle]];
         
     } else if (statusType == DMProgressHUDStatusTypeWarning) {
         
-        ((UIImageView *)_customView).image = [UIImage imageNamed:@"DMProgressImgs.bundle/progress_warning_32x28_"];
+        _ivIcon.image = [UIImage imageNamed:[NSString stringWithFormat:@"DMProgressImgs.bundle/progress_warning_%@32x28_", lightStyle]];
     }
+    
+    self.customView = _ivIcon;
     
     [self p_configConstraints];
 }
@@ -508,14 +519,19 @@
         
     } else if (_loadingType == DMProgressHUDLoadingTypeCircle) {
     
-        self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DMProgressImgs.bundle/progress_loading_32x32_"]];
+        NSString *lightStyle = _style == DMProgressHUDStyleLight ? @"black_" : @"";
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(p_showLoadingAnimation) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        self.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"DMProgressImgs.bundle/progress_loading_%@32x32_", lightStyle]]];
+        
+        if (!self.timer) {
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(p_showLoadingAnimation) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        }
     }
     
     [self p_configConstraints];
 }
+
 
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
@@ -574,6 +590,27 @@
     _insets = insets;
     
     [self p_configConstraints];
+}
+
+- (void)setStyle:(DMProgressHUDStyle)style {
+
+    _style = style;
+    
+    if (_style == DMProgressHUDStyleLight) {
+    
+        self.vBackground.backgroundColor = [UIColor colorWithRed:234/255.0 green:237/255.0 blue:239/255.0 alpha:0.95];
+        self.label.textColor = [UIColor blackColor];
+        
+        if (_mode == DMProgressHUDModeLoading) {
+            
+            self.indicator.color = [UIColor blackColor];
+            self.loadingType = self.loadingType;
+            
+        } else if (_mode == DMProgressHUDModeStatus) {
+        
+            self.statusType = self.statusType;
+        }
+    }
 }
 
 - (void)setMaskType:(DMProgressHUDMaskType)maskType {

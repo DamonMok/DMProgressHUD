@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E421A9B71FA0554C002F4247 /* DMProgressImgs.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E421A9B61FA0554C002F4247 /* DMProgressImgs.bundle */; };
+		E42458A81FA75BCA005936E5 /* DMProgressImgs.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E42458A71FA75BCA005936E5 /* DMProgressImgs.bundle */; };
 		E4449D1A1F9E17A3009F396F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4449D191F9E17A3009F396F /* main.m */; };
 		E4449D1D1F9E17A3009F396F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4449D1C1F9E17A3009F396F /* AppDelegate.m */; };
 		E4449D201F9E17A3009F396F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4449D1F1F9E17A3009F396F /* ViewController.m */; };
@@ -37,7 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E421A9B61FA0554C002F4247 /* DMProgressImgs.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DMProgressImgs.bundle; sourceTree = "<group>"; };
+		E42458A71FA75BCA005936E5 /* DMProgressImgs.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DMProgressImgs.bundle; sourceTree = "<group>"; };
 		E4449D151F9E17A3009F396F /* DMProgressHUD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DMProgressHUD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4449D191F9E17A3009F396F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E4449D1B1F9E17A3009F396F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -149,7 +149,7 @@
 		E4449D4B1F9E17E3009F396F /* DMProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
-				E421A9B61FA0554C002F4247 /* DMProgressImgs.bundle */,
+				E42458A71FA75BCA005936E5 /* DMProgressImgs.bundle */,
 				E4449D551F9E17E3009F396F /* DMProgressHUD.h */,
 				E4449D561F9E17E3009F396F /* DMProgressHUD.m */,
 			);
@@ -266,7 +266,7 @@
 				E4449D281F9E17A3009F396F /* LaunchScreen.storyboard in Resources */,
 				E4449D251F9E17A3009F396F /* Assets.xcassets in Resources */,
 				E4449D231F9E17A3009F396F /* Main.storyboard in Resources */,
-				E421A9B71FA0554C002F4247 /* DMProgressImgs.bundle in Resources */,
+				E42458A81FA75BCA005936E5 /* DMProgressImgs.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

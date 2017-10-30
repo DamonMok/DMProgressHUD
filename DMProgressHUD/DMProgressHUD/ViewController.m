@@ -233,8 +233,10 @@
 - (void)showProgressLoadingTypeIndicatorWithText {
     
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
+    hud.style = DMProgressHUDStyleLight;
     hud.mode = DMProgressHUDModeLoading;
     hud.label.text = @"Loading...";
+    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -270,6 +272,7 @@
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
     hud.label.text = @"Loading...";
+    hud.style = DMProgressHUDStyleLight;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -303,6 +306,7 @@
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeProgress;
     hud.label.text = @"Loading...";
+    hud.style = DMProgressHUDStyleLight;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -338,6 +342,7 @@
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
     hud.label.text = @"Loading...";
+    hud.style = DMProgressHUDStyleLight;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -365,9 +370,11 @@
 - (void)showProgressStatusFail {
     
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    hud.style = DMProgressHUDStyleLight;
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
     hud.label.text = @"Fail status";
+    
     [hud dismissAfter:1.0 completion:^{
         
         NSLog(@"complete");
@@ -393,6 +400,7 @@
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
     hud.mode = DMProgressHUDModeText;
     hud.label.text = @"This is your text";
+    hud.style = DMProgressHUDStyleLight;
     [hud dismissAfter:1.0];
 }
 
@@ -421,6 +429,7 @@
     DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeCustom;
     hud.label.text = @"Custom with label";
+    hud.style = DMProgressHUDStyleLight;
     
     //custom
     UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];

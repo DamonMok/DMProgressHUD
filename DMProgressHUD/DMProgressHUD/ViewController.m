@@ -36,11 +36,11 @@
     
     if (!_arrData) {
         
-        NSArray *arrLoading = @[@"Indicator", @"Indicator-带文字", @"circle", @"circle-带文字"];
-        NSArray *arrProgress = @[@"Circle", @"Circel-带文字", @"Sector", @"Sector-带文字"];
-        NSArray *arrStatus = [NSArray arrayWithObjects:@"【重构】成功提示", @"【重构】失败提示", @"【重构】警告提示", nil];
-        NSArray *arrText = @[@"【重构】纯文字提示"];
-        NSArray *arrCustom = @[@"【重构】自定义", @"【重构】自定义-带文字"];
+        NSArray *arrLoading = @[@"Indicator", @"Indicator-Text", @"Circle", @"Circle-Text"];
+        NSArray *arrProgress = @[@"Circle", @"Circel-Text", @"Sector", @"Sector-Text"];
+        NSArray *arrStatus = [NSArray arrayWithObjects:@"Success", @"fail", @"warning", nil];
+        NSArray *arrText = @[@"Text"];
+        NSArray *arrCustom = @[@"Custom", @"Custom-Text"];
         _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrProgress ,arrStatus, arrText,arrCustom, nil];
     }
     
@@ -410,7 +410,7 @@
     hud.mode = DMProgressHUDModeCustom;
     //custom
     UIView *customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
-    [hud setCustomView:customView width:80 height:80];
+    [hud setCustomView:customView width:180 height:180];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         

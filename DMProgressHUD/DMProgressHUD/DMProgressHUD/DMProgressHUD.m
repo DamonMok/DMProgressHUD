@@ -8,30 +8,31 @@
 
 #import "DMProgressHUD.h"
 
-#define margin 20
-
-#define animationDuration 0.2
+static const CGFloat kMargin = 20.0;
+static const NSTimeInterval kAnimationDuration = 0.2;
 
 @interface DMProgressHUD ()<CAAnimationDelegate>
 
 @property (nonatomic, strong) UIView *vBackground;
 
+@property (nonatomic, strong) UIView *customView;
+
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
 
 @property (nonatomic, strong) UIImageView *ivIcon;
 
-@property (nonatomic, strong) CAShapeLayer *layerCircle;     //Defaule cycle
-@property (nonatomic, strong) CAShapeLayer *layerProgress;  //Progress cycle
-@property (nonatomic, strong) UILabel *labProgress;         //Progress lable
+@property (nonatomic, strong) CAShapeLayer *layerCircle;     // Defaule cycle
+@property (nonatomic, strong) CAShapeLayer *layerProgress;  // Progress cycle
+@property (nonatomic, strong) UILabel *labProgress;         // Progress lable
 
 @property (nonatomic, assign) CGFloat customWidth;
 @property (nonatomic, assign) CGFloat customHeight;
 
 @property (nonatomic, strong) NSTimer *timer;
 
-@property (nonatomic, assign) DMProgressHUDAnimation animation; //Animation type
+@property (nonatomic, assign) DMProgressHUDAnimation animation; // Animation type
 
-@property (nonatomic, assign) DMProgressHUDMaskType maskType;
+@property (nonatomic, assign) DMProgressHUDMaskType maskType;   // Mask type
 
 @property (nonatomic, assign, getter=isShowHUD) BOOL showHUD;
 
@@ -123,7 +124,7 @@
     return self;
 }
 
-//Config common parameters
+// Config common parameters
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
@@ -135,7 +136,7 @@
     [self p_configConstraints];
 }
 
-//Set up all of the conponents
+// Set up all of the conponents
 - (void)p_setUpConponents {
     
     //Background view
@@ -144,6 +145,7 @@
     self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8];
     self.vBackground.layer.cornerRadius = 5;
     self.vBackground.layer.masksToBounds = YES;
+    _backgroundView = self.vBackground;
     [self addSubview:self.vBackground];
     
     //Custom view
@@ -192,11 +194,11 @@
     CGPoint center = CGPointMake(_customWidth*0.5, _customHeight*0.5);
     CGFloat radius = _customWidth*0.5;
     
-    //default cycle layer
+    // Default cycle layer
     UIBezierPath *cyclePath = [UIBezierPath bezierPath];
     [cyclePath addArcWithCenter:center radius:radius startAngle:3*M_PI_2 endAngle:3*M_PI_2+2*M_PI*1 clockwise:YES];
     
-    //progress detail layer
+    // Progress detail layer
     UIBezierPath *detailPath = [UIBezierPath bezierPath];
     
     UIColor *color = _style == DMProgressHUDStyleLight ? [UIColor blackColor] : [UIColor whiteColor];
@@ -223,15 +225,13 @@
         _labProgress.hidden = YES;
     }
     
-    //progress label
+    // Progress label
     self.layerCircle.path = [cyclePath CGPath];
     self.layerProgress.path = [detailPath CGPath];
     
     self.labProgress.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
     self.labProgress.center = center;
     self.labProgress.text = [NSString stringWithFormat:@"%.0f%%", self.progress*100];
-    
-    //    self.labProcess.hidden = self.process>0?NO:YES;
     
 }
 
@@ -242,7 +242,7 @@
     
     if (animation == DMProgressHUDAnimationDissolve) {
         self.alpha = 0;
-        [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             
             self.alpha = 1;
             
@@ -255,10 +255,10 @@
         
     } else if (animation == DMProgressHUDAnimationIncrement || animation == DMProgressHUDAnimationSpring) {
         
-        //transform
+        // Transform
         CAKeyframeAnimation *transformAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
         transformAnimation.delegate = self;
-        transformAnimation.duration = animationDuration/2;
+        transformAnimation.duration = kAnimationDuration/2;
         transformAnimation.removedOnCompletion = NO;
         transformAnimation.calculationMode = kCAAnimationCubicPaced;
         transformAnimation.fillMode = kCAFillModeForwards;
@@ -266,14 +266,14 @@
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
         
         if (animation == DMProgressHUDAnimationSpring) {
-            transformAnimation.duration = animationDuration+0.1;
+            transformAnimation.duration = kAnimationDuration+0.1;
             transformAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1, 1.1, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1)],
                           [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1)]];
         }
         
-        //opacity
+        // Opacity
         CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnimation.duration = transformAnimation.duration;
         opacityAnimation.removedOnCompletion = NO;
@@ -300,7 +300,7 @@
     
     if (_animation == DMProgressHUDAnimationDissolve) {
         
-        [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             
             self.alpha = 0;
         } completion:^(BOOL finished) {
@@ -321,10 +321,10 @@
         
         _dismissCompletion = completion;
         
-        //transform
+        // Transform
         CAKeyframeAnimation *transformAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
         transformAnimation.delegate = self;
-        transformAnimation.duration = animationDuration;
+        transformAnimation.duration = kAnimationDuration;
         transformAnimation.removedOnCompletion = NO;
         transformAnimation.calculationMode = kCAAnimationCubicPaced;
         transformAnimation.fillMode = kCAFillModeForwards;
@@ -334,7 +334,7 @@
                       [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.0, 0.0, 1.0)]
                       ];
         
-        //opacity
+        // Opacity
         CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnimation.duration = transformAnimation.duration;
         opacityAnimation.removedOnCompletion = NO;
@@ -375,13 +375,8 @@
         self.customWidth = 32;
         self.customHeight = self.customWidth;
         
-        //custom
         [self p_configCustomViewContraints];
-        
-        //label
         [self p_configLabelConstraintsWithTopView:_customView];
-        
-        
         [self p_configBgViewWithTopView:_customView bottomView:_label];
         
     } else if (_mode == DMProgressHUDModeProgress) {
@@ -395,12 +390,8 @@
         self.customWidth = 40;
         self.customHeight = self.customWidth;
         
-        //custom
         [self p_configCustomViewContraints];
-        
-        //label
         [self p_configLabelConstraintsWithTopView:_customView];
-        
         [self p_configBgViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeCustom) {
@@ -410,17 +401,12 @@
         [_vBackground removeConstraints:_vBackground.constraints];
         [_customView removeConstraints:_customView.constraints];
         
-        //custom
         [self p_configCustomViewContraints];
-        
-        //label
         [self p_configLabelConstraintsWithTopView:_customView];
-        
         [self p_configBgViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressHUDModeText) {
     
-        //label
         [_vBackground addSubview:_label];
         [_customView removeFromSuperview];
         
@@ -430,34 +416,34 @@
 }
 
 
-//自定义视图(CustomView)约束
+// CustomView's contraints
 - (void)p_configCustomViewContraints {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
-    //水平居中
+    // Centered horizontally
     [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    //大小
+    // Set width/height
     [_customView addConstraint:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:_customWidth]];
     [_customView addConstraint:[NSLayoutConstraint constraintWithItem:_customView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:_customHeight]];
     
     [self addConstraints:cusViewConstraints];
 }
 
-//约束Label视图
+// Label's contraints
 - (void)p_configLabelConstraintsWithTopView:(UIView *)topView {
     
     NSMutableArray *cusViewConstraints = [NSMutableArray new];
     
-    //居中
+    // Centered horizontally
     [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
-    //最大宽高
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*margin]];
-    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*margin]];
+    // The maximum width and height allowed
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*kMargin]];
+    [cusViewConstraints addObject:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*kMargin]];
     
-    //上方View间距
+    // The margin between Label and topView
     if (topView) {
         CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
         [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
@@ -466,25 +452,24 @@
     [self addConstraints:cusViewConstraints];
 }
 
-//适应内容视图(_vBackground)
+// _vBackground's constraints
 - (void)p_configBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
     
-    //最大宽高约束
+    // The maximum width and height allowed
     NSMutableArray *bgConstraints = [NSMutableArray new];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*margin]];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*margin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*kMargin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*kMargin]];
     [self addConstraints:bgConstraints];
     
-    //获取比较宽的子视图
+    // Get the wider subview
     UIView *maxWidthView = topView.bounds.size.width > bottomView.bounds.size.width ? topView : bottomView;
-    //根据子视图自适应父视图
+    // Adaptive _vBackground based on topView and bottomView
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-_insets.top]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:_insets.bottom]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-_insets.left]];
     [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeRight multiplier:1 constant:_insets.right]];
     
-
-    //内容垂直居中
+    // Centered vertically
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
 }
@@ -516,7 +501,7 @@
 
     _statusType = statusType;
     
-    //default width&height
+    // Default width&height
     self.customWidth = 22;
     self.customHeight = self.customWidth;
     
@@ -566,7 +551,7 @@
 }
 
 
-//custom view
+// Custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
     if (_mode != DMProgressHUDModeCustom || !view) return;
@@ -593,7 +578,7 @@
     
     _progress = progress;
     
-    //2%预显示
+    //Set the minimum default value to 2%
     //_progress = _progress > 0.02 ? _progress : 0.02;
     
     if (_mode == DMProgressHUDModeProgress) {
@@ -603,21 +588,21 @@
     
 }
 
-//限制宽
+// Limited width
 - (void)setCustomWidth:(CGFloat)customWidth {
     
-    CGFloat maxWidth = self.frame.size.width - 2*2*margin;
+    CGFloat maxWidth = self.frame.size.width - 2*2*kMargin;
     _customWidth = customWidth > maxWidth ? maxWidth : customWidth;
 }
 
-//限制高
+// Limited height
 - (void)setCustomHeight:(CGFloat)customHeight {
     
-    CGFloat maxHeight = self.frame.size.height - 2*2*margin;
+    CGFloat maxHeight = self.frame.size.height - 2*2*kMargin;
     _customHeight  = customHeight > maxHeight ? maxHeight : customHeight;
 }
 
-//限制内边距
+// Limited insets
 - (void)setInsets:(UIEdgeInsets)insets {
 
     _insets = insets;
@@ -689,7 +674,7 @@
         
     } else {
     
-        //clean up
+        // Clean up
         if (self.timer) {
             [self.timer invalidate];
             self.timer = nil;
@@ -704,7 +689,7 @@
     }
 }
 
-#pragma mark - touch delegate
+#pragma mark - Touch delegate
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
 
     if (self.maskTapHandle) {

@@ -212,9 +212,12 @@
 
 - (void)showProgressLoadingTypeIndicator {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
-    hud.mode = DMProgressHUDModeLoading;
+    DMProgressHUD *hud = [DMProgressHUD showLoadingHUDAddedTo:self.view];
     //hud.insets = UIEdgeInsetsMake(0, 0, 0, 0);
+    hud.showCompletion = ^{
+        
+        NSLog(@"did show");
+    };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -287,8 +290,7 @@
 
 - (void)showProgressTypeCircle {
     
-    DMProgressHUD *hud= [DMProgressHUD showHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
-    hud.mode = DMProgressHUDModeProgress;
+    DMProgressHUD *hud= [DMProgressHUD showProgressHUDAddedTo:self.view];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -357,8 +359,7 @@
 
 - (void)showProgressStatusSuccess {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
-    hud.mode = DMProgressHUDModeStatus;
+    DMProgressHUD *hud = [DMProgressHUD showStatusHUDAddedTo:self.view];
     hud.statusType = DMProgressHUDStatusTypeSuccess;
     hud.label.text = @"Success status";
     [hud dismissAfter:1.0 completion:^{
@@ -397,8 +398,7 @@
 
 - (void)showProgressText {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
-    hud.mode = DMProgressHUDModeText;
+    DMProgressHUD *hud = [DMProgressHUD showTextHUDAddedTo:self.view];
     hud.label.text = @"This is your text";
     hud.style = DMProgressHUDStyleLight;
     [hud dismissAfter:1.0];
@@ -408,10 +408,9 @@
     
     DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeCustom;
-    hud.label.text = @"";
     //custom
-    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
-    [hud setCustomView:view width:80 height:80];
+    UIView *customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
+    [hud setCustomView:customView width:80 height:80];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         

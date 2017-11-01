@@ -20,16 +20,16 @@
 
 @property (nonatomic, strong) UIImageView *ivIcon;
 
-@property (nonatomic, strong) CAShapeLayer *layerCircle;     //defaule cycle
-@property (nonatomic, strong) CAShapeLayer *layerProgress;  //progress cycle
-@property (nonatomic, strong) UILabel *labProgress;         //progress lable
+@property (nonatomic, strong) CAShapeLayer *layerCircle;     //Defaule cycle
+@property (nonatomic, strong) CAShapeLayer *layerProgress;  //Progress cycle
+@property (nonatomic, strong) UILabel *labProgress;         //Progress lable
 
 @property (nonatomic, assign) CGFloat customWidth;
 @property (nonatomic, assign) CGFloat customHeight;
 
 @property (nonatomic, strong) NSTimer *timer;
 
-@property (nonatomic, assign) DMProgressHUDAnimation animation;
+@property (nonatomic, assign) DMProgressHUDAnimation animation; //Animation type
 
 @property (nonatomic, assign) DMProgressHUDMaskType maskType;
 
@@ -44,6 +44,34 @@
 @implementation DMProgressHUD
 
 #pragma mark - Life cycle
++ (instancetype)showLoadingHUDAddedTo:(UIView *)view {
+
+    DMProgressHUD *hud = [self showHUDAddedTo:view];
+    hud.mode = DMProgressHUDModeLoading;
+    return hud;
+}
+
++ (instancetype)showProgressHUDAddedTo:(UIView *)view {
+
+    DMProgressHUD *hud = [self showHUDAddedTo:view];
+    hud.mode = DMProgressHUDModeProgress;
+    return hud;
+}
+
++ (instancetype)showStatusHUDAddedTo:(UIView *)view {
+
+    DMProgressHUD *hud = [self showHUDAddedTo:view];
+    hud.mode = DMProgressHUDModeStatus;
+    return hud;
+}
+
++ (instancetype)showTextHUDAddedTo:(UIView *)view {
+
+    DMProgressHUD *hud = [self showHUDAddedTo:view];
+    hud.mode = DMProgressHUDModeText;
+    return hud;
+}
+
 + (instancetype)showHUDAddedTo:(UIView *)view {
 
     return [self showHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:DMProgressHUDMaskTypeNone];
@@ -218,7 +246,12 @@
             
             self.alpha = 1;
             
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            
+            if (self.showCompletion) {
+                self.showCompletion();
+            }
+        }];
         
     } else if (animation == DMProgressHUDAnimationIncrement || animation == DMProgressHUDAnimationSpring) {
         
@@ -536,7 +569,7 @@
 //custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
-    if (_mode != DMProgressHUDModeCustom) return;
+    if (_mode != DMProgressHUDModeCustom || !view) return;
     
     self.customWidth = width;
     self.customHeight = height;
@@ -648,9 +681,15 @@
 #pragma mark - CAAnimation delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     
-    //clean up
-    if (!self.isShowHUD) {
+    if (self.isShowHUD) {
         
+        if (self.showCompletion) {
+            self.showCompletion();
+        }
+        
+    } else {
+    
+        //clean up
         if (self.timer) {
             [self.timer invalidate];
             self.timer = nil;

@@ -98,15 +98,15 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 @property (nonatomic, assign) DMProgressHUDStyle style;
 
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view;
++ (instancetype)showHUDAddedTo:(UIView *)view;
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation;
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation;
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType;
++ (instancetype)showHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType;
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType;
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType;
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle;
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle;
 
 - (void)dismiss;
 

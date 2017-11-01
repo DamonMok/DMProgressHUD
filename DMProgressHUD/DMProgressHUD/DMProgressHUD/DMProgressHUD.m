@@ -44,27 +44,27 @@
 @implementation DMProgressHUD
 
 #pragma mark - Life cycle
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view {
++ (instancetype)showHUDAddedTo:(UIView *)view {
 
-    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:DMProgressHUDMaskTypeNone];
+    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:DMProgressHUDMaskTypeNone];
 }
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
 
-    return [self showProgressHUDAddedTo:view animation:animation maskType:DMProgressHUDMaskTypeNone];
+    return [self showHUDAddedTo:view animation:animation maskType:DMProgressHUDMaskTypeNone];
 }
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType {
++ (instancetype)showHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType {
 
-    return [self showProgressHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:maskType];
+    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:maskType];
 }
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType {
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType {
 
-    return [self showProgressHUDAddedTo:view animation:animation maskType:maskType maskTapHandle:nil];
+    return [self showHUDAddedTo:view animation:animation maskType:maskType maskTapHandle:nil];
 }
 
-+ (instancetype)showProgressHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle {
++ (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType maskTapHandle:(DMProgressHUDMaskTapHandle)maskTapHandle {
 
     if (!view) return nil;
     

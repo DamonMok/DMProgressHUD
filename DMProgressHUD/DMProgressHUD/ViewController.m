@@ -212,7 +212,7 @@
 
 - (void)showProgressLoadingTypeIndicator {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeLoading;
     //hud.insets = UIEdgeInsetsMake(0, 0, 0, 0);
     
@@ -232,7 +232,7 @@
 
 - (void)showProgressLoadingTypeIndicatorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
     hud.style = DMProgressHUDStyleLight;
     hud.mode = DMProgressHUDModeLoading;
     hud.label.text = @"Loading...";
@@ -251,7 +251,7 @@
 
 - (void)showProgressLoadingTypeCircle {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
     
@@ -268,7 +268,7 @@
 
 - (void)showProgressLoadingTypeCircleWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
     hud.label.text = @"Loading...";
@@ -287,7 +287,7 @@
 
 - (void)showProgressTypeCircle {
     
-    DMProgressHUD *hud= [DMProgressHUD showProgressHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
+    DMProgressHUD *hud= [DMProgressHUD showHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
     hud.mode = DMProgressHUDModeProgress;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -303,7 +303,7 @@
 
 - (void)showProgressTypeCircleWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeProgress;
     hud.label.text = @"Loading...";
     hud.style = DMProgressHUDStyleLight;
@@ -321,7 +321,7 @@
 
 - (void)showProgressTypeSector {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
     
@@ -338,7 +338,7 @@
 
 - (void)showProgressTypeSectorWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
     hud.label.text = @"Loading...";
@@ -357,7 +357,7 @@
 
 - (void)showProgressStatusSuccess {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeSuccess;
     hud.label.text = @"Success status";
@@ -369,7 +369,7 @@
 
 - (void)showProgressStatusFail {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.style = DMProgressHUDStyleLight;
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
@@ -383,7 +383,7 @@
 
 - (void)showProgressStatusWarning {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring maskType:DMProgressHUDMaskTypeGray maskTapHandle:^(DMProgressHUD *hud) {
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring maskType:DMProgressHUDMaskTypeGray maskTapHandle:^(DMProgressHUD *hud) {
         
         [hud dismissCompletion:^{
             
@@ -397,7 +397,7 @@
 
 - (void)showProgressText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring];
     hud.mode = DMProgressHUDModeText;
     hud.label.text = @"This is your text";
     hud.style = DMProgressHUDStyleLight;
@@ -406,7 +406,7 @@
 
 - (void)showProgressCustom {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
     hud.mode = DMProgressHUDModeCustom;
     hud.label.text = @"";
     //custom
@@ -426,7 +426,7 @@
 
 - (void)showProgressCustomWithText {
     
-    DMProgressHUD *hud = [DMProgressHUD showProgressHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
     hud.mode = DMProgressHUDModeCustom;
     hud.label.text = @"Custom with label";
     hud.style = DMProgressHUDStyleLight;

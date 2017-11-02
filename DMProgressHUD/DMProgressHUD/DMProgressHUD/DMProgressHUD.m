@@ -75,7 +75,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 + (instancetype)showHUDAddedTo:(UIView *)view {
 
-    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:DMProgressHUDMaskTypeNone];
+    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationGradient maskType:DMProgressHUDMaskTypeNone];
 }
 
 + (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation {
@@ -85,7 +85,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 + (instancetype)showHUDAddedTo:(UIView *)view maskType:(DMProgressHUDMaskType)maskType {
 
-    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationDissolve maskType:maskType];
+    return [self showHUDAddedTo:view animation:DMProgressHUDAnimationGradient maskType:maskType];
 }
 
 + (instancetype)showHUDAddedTo:(UIView *)view animation:(DMProgressHUDAnimation)animation maskType:(DMProgressHUDMaskType)maskType {
@@ -240,7 +240,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     _showHUD = YES;
     
-    if (animation == DMProgressHUDAnimationDissolve) {
+    if (animation == DMProgressHUDAnimationGradient) {
         self.alpha = 0;
         [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             
@@ -298,7 +298,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
     _showHUD = NO;
     
-    if (_animation == DMProgressHUDAnimationDissolve) {
+    if (_animation == DMProgressHUDAnimationGradient) {
         
         [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             

@@ -12,69 +12,69 @@
 
 typedef NS_ENUM(NSInteger, DMProgressHUDMode) {
 
-    DMProgressHUDModeLoading,
+    DMProgressHUDModeLoading = 0,       //Default mode,show hud in a indeterminate mode
 
-    DMProgressHUDModeProgress,
+    DMProgressHUDModeProgress = 1,      //Show hud in a Determinate mode.
     
-    DMProgressHUDModeStatus,
+    DMProgressHUDModeStatus = 2,        //Show hud in Status mode.
     
-    DMProgressHUDModeText,
+    DMProgressHUDModeText = 3,          //Show hud in Text mode.
     
-    DMProgressHUDModeCustom
+    DMProgressHUDModeCustom = 4,        //Show hud in Custom-view mode.
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDLoadingType) {
 
-    DMProgressHUDLoadingTypeIndicator,
+    DMProgressHUDLoadingTypeIndicator,      //The type of UIActivityIndicatorView.
     
-    DMProgressHUDLoadingTypeCircle
+    DMProgressHUDLoadingTypeCircle,         //The type of A rotating circle.
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
     
-    DMProgressHUDProgressTypeCircle,
+    DMProgressHUDProgressTypeCircle,        //The type of outer ring filling.
     
-    DMProgressHUDProgressTypeSector
+    DMProgressHUDProgressTypeSector,        //The type of sector filling.
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDStatusType) {
 
-    DMProgressHUDStatusTypeSuccess,
+    DMProgressHUDStatusTypeSuccess,     //The type of Success.
     
-    DMProgressHUDStatusTypeFail,
+    DMProgressHUDStatusTypeFail,        //The type of fail.
     
-    DMProgressHUDStatusTypeWarning
+    DMProgressHUDStatusTypeWarning,     //The type of warning.
     
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDAnimation) {
 
-    DMProgressHUDAnimationDissolve,
+    DMProgressHUDAnimationGradient,     //Animated by Color-gradient,related to alpha.
     
-    DMProgressHUDAnimationIncrement,
+    DMProgressHUDAnimationIncrement,    //Animated by Increment.
     
-    DMProgressHUDAnimationSpring
+    DMProgressHUDAnimationSpring,       //Animated by Spring.
 
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDStyle) {
     
-    DMProgressHUDStyleDark = 0,
+    DMProgressHUDStyleDark = 0,     //The Dark-style of HUD.
     
-    DMProgressHUDStyleLight
+    DMProgressHUDStyleLight,        //The Light-style of HUD.
 };
 
 typedef NS_ENUM(NSInteger, DMProgressHUDMaskType) {
 
-    DMProgressHUDMaskTypeNone,
+    DMProgressHUDMaskTypeNone,      //Show HUD without mask.
     
-    DMProgressHUDMaskTypeClear,
+    DMProgressHUDMaskTypeClear,     //Show HUD with Clear-color mask.
     
-    DMProgressHUDMaskTypeGray
+    DMProgressHUDMaskTypeGray       //Show HUD with Gray-color mask.
 };
 
-typedef void(^DMProgressHUDDismissCompletion)();
 typedef void(^DMProgressHUDShowCompletion)();
+typedef void(^DMProgressHUDDismissCompletion)();
 
 typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 

@@ -100,7 +100,7 @@
     [labAnimation sizeToFit];
     [self.view addSubview:labAnimation];
     
-    UISegmentedControl *sgmAnimation = [[UISegmentedControl alloc] initWithItems:@[@"Dissolve", @"Increment", @"Spring"]];
+    UISegmentedControl *sgmAnimation = [[UISegmentedControl alloc] initWithItems:@[@"Gradient", @"Increment", @"Spring"]];
     sgmAnimation.selectedSegmentIndex = 0;
     [sgmAnimation addTarget:self action:@selector(sementedControlClick:) forControlEvents:UIControlEventValueChanged];
     sgmAnimation.frame = CGRectMake(20, CGRectGetMaxY(labAnimation.frame)+4, 200, 26);
@@ -158,7 +158,7 @@
     
         if (sgm.selectedSegmentIndex == 0) {
             
-            _animation = DMProgressHUDAnimationDissolve;
+            _animation = DMProgressHUDAnimationGradient;
         } else if (sgm.selectedSegmentIndex == 1) {
         
             _animation = DMProgressHUDAnimationIncrement;

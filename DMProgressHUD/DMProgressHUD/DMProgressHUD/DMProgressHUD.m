@@ -578,8 +578,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     _progress = progress;
     
-    //Set the minimum default value to 2%
-    //_progress = _progress > 0.02 ? _progress : 0.02;
+    // Set the minimum default value to 2%
+    // _progress = _progress > 0.02 ? _progress : 0.02;
     
     if (_mode == DMProgressHUDModeProgress) {
         

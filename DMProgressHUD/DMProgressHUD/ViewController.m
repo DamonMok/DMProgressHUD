@@ -11,6 +11,18 @@
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) UISegmentedControl *sgmStyle;     //Style
+@property (nonatomic, assign) DMProgressHUDStyle style;     //Style-type in DMProgressHUD
+
+@property (nonatomic, strong) UISegmentedControl *sgmText;      //Text
+@property (nonatomic, copy) NSString *text;     //Text string
+
+@property (nonatomic, strong) UISegmentedControl *sgmAnimation;     //Animation
+@property (nonatomic, assign) DMProgressHUDAnimation animation;     //Animation-type in DMProgressHUD
+
+@property (nonatomic, strong) UISegmentedControl *sgmMask;      //Mask
+@property (nonatomic, assign) DMProgressHUDMaskType mark;       //Mask-type in DMProgressHUD
+
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray<NSArray *> *arrData;
@@ -19,7 +31,7 @@
 
 @implementation ViewController
 
-#pragma mark - lazy load
+#pragma mark - Lazy load
 - (UITableView *)tableView {
     
     if (!_tableView) {
@@ -36,29 +48,138 @@
     
     if (!_arrData) {
         
-        NSArray *arrLoading = @[@"Indicator", @"Indicator-Text", @"Circle", @"Circle-Text"];
-        NSArray *arrProgress = @[@"Circle", @"Circel-Text", @"Sector", @"Sector-Text"];
+        NSArray *arrLoading = @[@"Indicator", @"Circle"];
+        NSArray *arrProgress = @[@"Circle", @"Sector"];
         NSArray *arrStatus = [NSArray arrayWithObjects:@"Success", @"fail", @"warning", nil];
         NSArray *arrText = @[@"Text"];
-        NSArray *arrCustom = @[@"Custom", @"Custom-Text"];
+        NSArray *arrCustom = @[@"Custom"];
         _arrData = [NSMutableArray arrayWithObjects:arrLoading ,arrProgress ,arrStatus, arrText,arrCustom, nil];
     }
     
     return _arrData;
 }
 
-#pragma mark - cycle
+#pragma mark - Life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.text = @"Here's info";
+    
+    UILabel *labStyle = [[UILabel alloc] initWithFrame:CGRectMake(20, 22, 0, 0)];
+    labStyle.text = @"Style";
+    labStyle.textColor = [UIColor blackColor];
+    labStyle.font = [UIFont boldSystemFontOfSize:16.0];
+    [labStyle sizeToFit];
+    [self.view addSubview:labStyle];
+    
+    UISegmentedControl *sgmStyle = [[UISegmentedControl alloc] initWithItems:@[@"Dark", @"Light"]];
+    sgmStyle.selectedSegmentIndex = 0;
+    [sgmStyle addTarget:self action:@selector(sementedControlClick:) forControlEvents:UIControlEventValueChanged];
+    sgmStyle.frame = CGRectMake(20, CGRectGetMaxY(labStyle.frame)+4, 100, 26);
+    _sgmStyle = sgmStyle;
+    [self.view addSubview:sgmStyle];
+    
+    UILabel *labText = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(sgmStyle.frame)+20, 22, 0, 0)];
+    labText.text = @"Text";
+    labText.textColor = [UIColor blackColor];
+    labText.font = [UIFont boldSystemFontOfSize:16.0];
+    [labText sizeToFit];
+    [self.view addSubview:labText];
+    
+    UISegmentedControl *sgmText = [[UISegmentedControl alloc] initWithItems:@[@"YES", @"NO"]];
+    sgmText.selectedSegmentIndex = 0;
+    [sgmText addTarget:self action:@selector(sementedControlClick:) forControlEvents:UIControlEventValueChanged];
+    sgmText.frame = CGRectMake(labText.frame.origin.x, CGRectGetMaxY(labText.frame)+4, 100, 26);
+    _sgmText = sgmText;
+    [self.view addSubview:sgmText];
+    
+    UILabel *labAnimation = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(sgmStyle.frame)+10, 0, 0)];
+    labAnimation.text = @"Animation";
+    labAnimation.textColor = [UIColor blackColor];
+    labAnimation.font = [UIFont boldSystemFontOfSize:16.0];
+    [labAnimation sizeToFit];
+    [self.view addSubview:labAnimation];
+    
+    UISegmentedControl *sgmAnimation = [[UISegmentedControl alloc] initWithItems:@[@"Dissolve", @"Increment", @"Spring"]];
+    sgmAnimation.selectedSegmentIndex = 0;
+    [sgmAnimation addTarget:self action:@selector(sementedControlClick:) forControlEvents:UIControlEventValueChanged];
+    sgmAnimation.frame = CGRectMake(20, CGRectGetMaxY(labAnimation.frame)+4, 200, 26);
+    _sgmAnimation = sgmAnimation;
+    [self.view addSubview:sgmAnimation];
+    
+    UILabel *labMask = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(sgmAnimation.frame)+10, 0, 0)];
+    labMask.text = @"Mask";
+    labMask.textColor = [UIColor blackColor];
+    labMask.font = [UIFont boldSystemFontOfSize:16.0];
+    [labMask sizeToFit];
+    [self.view addSubview:labMask];
+    
+    UISegmentedControl *sgmMask = [[UISegmentedControl alloc] initWithItems:@[@"None", @"clear", @"gray"]];
+    sgmMask.selectedSegmentIndex = 0;
+    [sgmMask addTarget:self action:@selector(sementedControlClick:) forControlEvents:UIControlEventValueChanged];
+    sgmMask.frame = CGRectMake(20, CGRectGetMaxY(labMask.frame)+4, 200, 26);
+    _sgmMask = sgmMask;
+    [self.view addSubview:sgmMask];
+    
+    
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
-    self.tableView.frame = CGRectMake(0, 22, self.view.bounds.size.width, self.view.bounds.size.height-22);
+    self.tableView.frame = CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-200);
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     
+}
+
+#pragma mark - UISegmentedControl handle
+- (void)sementedControlClick:(UISegmentedControl *)sgm {
+
+    if (sgm == _sgmStyle) {
+        
+        if (sgm.selectedSegmentIndex == 0) {
+            
+            _style = DMProgressHUDStyleDark;
+        } else if (sgm.selectedSegmentIndex == 1) {
+        
+            _style = DMProgressHUDStyleLight;
+        }
+        
+    } else if (sgm == _sgmText) {
     
+        if (sgm.selectedSegmentIndex == 0) {
+            
+            _text = @"Here's Info";
+        } else if (sgm.selectedSegmentIndex == 1) {
+        
+            _text = @"";
+        }
+        
+    } else if (sgm == _sgmAnimation) {
+    
+        if (sgm.selectedSegmentIndex == 0) {
+            
+            _animation = DMProgressHUDAnimationDissolve;
+        } else if (sgm.selectedSegmentIndex == 1) {
+        
+            _animation = DMProgressHUDAnimationIncrement;
+        } else if (sgm.selectedSegmentIndex == 2) {
+        
+            _animation = DMProgressHUDAnimationSpring;
+        }
+        
+    } else if (sgm == _sgmMask) {
+    
+        if (sgm.selectedSegmentIndex == 0) {
+            
+            _mark = DMProgressHUDMaskTypeNone;
+        } else if (sgm.selectedSegmentIndex == 1) {
+        
+            _mark = DMProgressHUDMaskTypeClear;
+        } else if (sgm.selectedSegmentIndex == 2) {
+        
+            _mark = DMProgressHUDMaskTypeGray;
+        }
+    }
 }
 
 #pragma mark - tableView dataSource
@@ -107,13 +228,7 @@
                 [self showProgressLoadingTypeIndicator];
                 break;
             case 1:
-                [self showProgressLoadingTypeIndicatorWithText];
-                break;
-            case 2:
                 [self showProgressLoadingTypeCircle];
-                break;
-            case 3:
-                [self showProgressLoadingTypeCircleWithText];
                 break;
                 
             default:
@@ -127,13 +242,7 @@
                 [self showProgressTypeCircle];
                 break;
             case 1:
-                [self showProgressTypeCircleWithText];
-                break;
-            case 2:
                 [self showProgressTypeSector];
-                break;
-            case 3:
-                [self showProgressTypeSectorWithText];
                 break;
                 
             default:
@@ -171,9 +280,6 @@
             case 0:
                 [self showProgressCustom];
                 break;
-            case 1:
-                [self showProgressCustomWithText];
-                break;
                 
             default:
                 break;
@@ -209,15 +315,13 @@
     }
 }
 
-
+#pragma mark - Show HUD
 - (void)showProgressLoadingTypeIndicator {
     
-    DMProgressHUD *hud = [DMProgressHUD showLoadingHUDAddedTo:self.view];
-    //hud.insets = UIEdgeInsetsMake(0, 0, 0, 0);
-    hud.showCompletion = ^{
-        
-        NSLog(@"did show");
-    };
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
+    hud.mode = DMProgressHUDModeLoading;
+    hud.style = _style;
+    hud.label.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -233,49 +337,13 @@
     });
 }
 
-- (void)showProgressLoadingTypeIndicatorWithText {
-    
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view maskType:DMProgressHUDMaskTypeGray];
-    hud.style = DMProgressHUDStyleLight;
-    hud.mode = DMProgressHUDModeLoading;
-    hud.label.text = @"Loading...";
-    
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self doSomething];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [hud dismiss];
-        });
-    });
-}
-
 - (void)showProgressLoadingTypeCircle {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self doSomething];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [hud dismiss];
-        });
-    });
-}
-
-- (void)showProgressLoadingTypeCircleWithText {
-    
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
-    hud.mode = DMProgressHUDModeLoading;
-    hud.loadingType = DMProgressHUDLoadingTypeCircle;
-    hud.label.text = @"Loading...";
-    hud.style = DMProgressHUDStyleLight;
+    hud.style = _style;
+    hud.label.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -290,25 +358,10 @@
 
 - (void)showProgressTypeCircle {
     
-    DMProgressHUD *hud= [DMProgressHUD showProgressHUDAddedTo:self.view];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self doSomething];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [hud dismiss];
-        });
-    });
-}
-
-- (void)showProgressTypeCircleWithText {
-    
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeProgress;
-    hud.label.text = @"Loading...";
-    hud.style = DMProgressHUDStyleLight;
+    hud.style = _style;
+    hud.label.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -323,9 +376,11 @@
 
 - (void)showProgressTypeSector {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
+    hud.style = _style;
+    hud.label.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -338,30 +393,15 @@
     });
 }
 
-- (void)showProgressTypeSectorWithText {
-    
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
-    hud.mode = DMProgressHUDModeProgress;
-    hud.progressType = DMProgressHUDProgressTypeSector;
-    hud.label.text = @"Loading...";
-    hud.style = DMProgressHUDStyleLight;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self doSomething];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [hud dismiss];
-        });
-    });
-}
 
 - (void)showProgressStatusSuccess {
     
-    DMProgressHUD *hud = [DMProgressHUD showStatusHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
+    hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeSuccess;
-    hud.label.text = @"Success status";
+    hud.style = _style;
+    hud.label.text = _text;
+    
     [hud dismissAfter:1.0 completion:^{
         
         NSLog(@"complete");
@@ -370,11 +410,11 @@
 
 - (void)showProgressStatusFail {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
-    hud.style = DMProgressHUDStyleLight;
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
-    hud.label.text = @"Fail status";
+    hud.style = _style;
+    hud.label.text = _text;
     
     [hud dismissAfter:1.0 completion:^{
         
@@ -384,55 +424,37 @@
 
 - (void)showProgressStatusWarning {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationSpring maskType:DMProgressHUDMaskTypeGray maskTapHandle:^(DMProgressHUD *hud) {
-        
-        [hud dismissCompletion:^{
-            
-            NSLog(@"dismiss complete");
-        }];
-    }];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeWarning;
-    hud.label.text = @"Warning status";
+    hud.style = _style;
+    hud.label.text = _text;
+    
+    [hud dismissAfter:1.0 completion:^{
+        
+        NSLog(@"complete");
+    }];
 }
 
 - (void)showProgressText {
     
-    DMProgressHUD *hud = [DMProgressHUD showTextHUDAddedTo:self.view];
-    hud.label.text = @"This is your text";
-    hud.style = DMProgressHUDStyleLight;
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
+    hud.mode = DMProgressHUDModeText;
+    hud.style = _style;
+    hud.label.text = _text;
+    
     [hud dismissAfter:1.0];
 }
 
 - (void)showProgressCustom {
     
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view];
+    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeCustom;
+    hud.style = _style;
+    hud.label.text = _text;
     //custom
     UIView *customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     [hud setCustomView:customView width:180 height:180];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self doSomething];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [hud dismiss];
-        });
-    });
-}
-
-- (void)showProgressCustomWithText {
-    
-    DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:DMProgressHUDAnimationIncrement];
-    hud.mode = DMProgressHUDModeCustom;
-    hud.label.text = @"Custom with label";
-    hud.style = DMProgressHUDStyleLight;
-    
-    //custom
-    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
-    [hud setCustomView:view width:80 height:80];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         

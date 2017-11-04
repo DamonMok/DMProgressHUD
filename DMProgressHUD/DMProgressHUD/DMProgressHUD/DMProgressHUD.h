@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, DMProgressHUDMode) {
 
 typedef NS_ENUM(NSInteger, DMProgressHUDLoadingType) {
 
-    DMProgressHUDLoadingTypeIndicator,      //The type of UIActivityIndicatorView.
+    DMProgressHUDLoadingTypeIndicator,      //Default type,similar to UIActivityIndicatorView.
     
     DMProgressHUDLoadingTypeCircle,         //The type of A rotating circle.
 };
@@ -39,11 +39,11 @@ typedef NS_ENUM(NSInteger, DMProgressHUDProgressType) {
 
 typedef NS_ENUM(NSInteger, DMProgressHUDStatusType) {
 
-    DMProgressHUDStatusTypeSuccess,     //The type of Success.
+    DMProgressHUDStatusTypeSuccess,     //The type of successful status.
     
-    DMProgressHUDStatusTypeFail,        //The type of fail.
+    DMProgressHUDStatusTypeFail,        //The type of failure status.
     
-    DMProgressHUDStatusTypeWarning,     //The type of warning.
+    DMProgressHUDStatusTypeWarning,     //The type of warning status.
     
 };
 
@@ -89,25 +89,25 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 @property (nonatomic, assign) DMProgressHUDStatusType statusType;
 
 /**
- * Text label.
+ * Text label.Set text/textColor/numberOfLines and so on.
  */
 @property (nonatomic, strong, readonly) UILabel *label;
 
 /**
- * Use this parameter when the mode is DMProgressHUDModeProgress.
+ * Use this Attribute when the mode is DMProgressHUDModeProgress.
  */
 @property (nonatomic, assign) CGFloat progress;
 
 /**
- * Content insets.
+ * ContentView's UIEdgeInsets.
  */
 @property (nonatomic, assign) UIEdgeInsets insets;
 
 /**
- * background view of HUD.
- * Use this parameter to set backgroundColor/cornerRadius and so on.
+ * ContentView of HUD.
+ * Use this Attribute to set backgroundColor/cornerRadius and so on.
  */
-@property (nonatomic, strong, readonly) UIView *backgroundView;
+@property (nonatomic, strong, readonly) UIView *contentView;
 
 /**
  * HUD style.
@@ -148,9 +148,10 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
  * NOTE: This method uses the default StatusType/MaskType/Animation.
  *
  * @param view The view that the Status-HUD is going to be added to.
+ * @param type Type of status.See DMProgressHUDStatusType.
  * @return The created HUD.
  */
-+ (instancetype)showStatusHUDAddedTo:(UIView *)view;
++ (instancetype)showStatusHUDAddedTo:(UIView *)view statusType:(DMProgressHUDStatusType)type;
 
 /**
  * Displays a HUD of type TEXT.
@@ -209,10 +210,10 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height;
 
 /**
- * Gets the top HUD in View.
+ * Get the topmost HUD of the view.
  *
  * @param view The view that will be searched.
- * @return Returns the HUD found.
+ * @return The found HUD.
  */
 + (DMProgressHUD *)progressHUDForView:(UIView *)view;
 

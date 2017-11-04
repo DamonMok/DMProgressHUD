@@ -45,6 +45,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @implementation DMProgressHUD
 
 #pragma mark - Life cycle
+/// Easy-call
 + (instancetype)showLoadingHUDAddedTo:(UIView *)view {
 
     DMProgressHUD *hud = [self showHUDAddedTo:view];
@@ -59,10 +60,22 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return hud;
 }
 
-+ (instancetype)showStatusHUDAddedTo:(UIView *)view {
++ (instancetype)showStatusHUDAddedTo:(UIView *)view statusType:(DMProgressHUDStatusType)type {
 
     DMProgressHUD *hud = [self showHUDAddedTo:view];
     hud.mode = DMProgressHUDModeStatus;
+    
+    if (type == DMProgressHUDStatusTypeSuccess) {
+        
+        hud.statusType = DMProgressHUDStatusTypeSuccess;
+    } else if (type == DMProgressHUDStatusTypeFail) {
+    
+        hud.statusType = DMProgressHUDStatusTypeFail;
+    } else if (type == DMProgressHUDStatusTypeWarning) {
+    
+        hud.statusType = DMProgressHUDStatusTypeWarning;
+    }
+    
     return hud;
 }
 
@@ -73,6 +86,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return hud;
 }
 
+/// More
 + (instancetype)showHUDAddedTo:(UIView *)view {
 
     return [self showHUDAddedTo:view animation:DMProgressHUDAnimationGradient maskType:DMProgressHUDMaskTypeNone];
@@ -120,7 +134,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         
         [self p_configCommon];
     }
-    
+
     return self;
 }
 
@@ -139,20 +153,20 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 // Set up all of the conponents
 - (void)p_setUpConponents {
     
-    //Background view
+    // Background view
     self.vBackground = [[UIView alloc] init];
     self.vBackground.translatesAutoresizingMaskIntoConstraints = NO;
     self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8];
     self.vBackground.layer.cornerRadius = 5;
     self.vBackground.layer.masksToBounds = YES;
-    _backgroundView = self.vBackground;
+    _contentView = self.vBackground;
     [self addSubview:self.vBackground];
     
-    //Custom view
+    // Custom view
     _customView = nil;
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
     
-    //Text label
+    // Text label
     _label = [[UILabel alloc] init];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
     self.label.textColor = [UIColor whiteColor];
@@ -162,12 +176,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.label setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     [self.label addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:nil];
     
-    //UIActivityIndicatorView
+    // UIActivityIndicatorView
     _indicator = [[UIActivityIndicatorView alloc] init];
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     _indicator.translatesAutoresizingMaskIntoConstraints = NO;
     
-    //Progress
+    // Progress
     _layerCircle = [[CAShapeLayer alloc] init];
     _layerCircle.lineWidth = 3.0;
     _layerCircle.strokeColor = [[UIColor lightGrayColor] CGColor];
@@ -184,7 +198,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     _labProgress.textAlignment = NSTextAlignmentCenter;
     [_labProgress sizeToFit];
     
-    //default mode
+    // Default mode
     _customView = _indicator;
     self.loadingType = DMProgressHUDLoadingTypeIndicator;
 }

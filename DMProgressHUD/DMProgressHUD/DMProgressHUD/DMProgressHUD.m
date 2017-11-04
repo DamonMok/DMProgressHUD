@@ -142,16 +142,19 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 - (void)p_configCommon {
     
     self.backgroundColor = [UIColor clearColor];
+    self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin;
     self.customWidth = 22;
     self.customHeight = 22;
     _insets = UIEdgeInsetsMake(20, 26, 20, 26);
     
-    [self p_setUpConponents];
+    
+    
+    [self p_configConponents];
     [self p_configConstraints];
 }
 
 // Set up all of the conponents
-- (void)p_setUpConponents {
+- (void)p_configConponents {
     
     // Background view
     self.vBackground = [[UIView alloc] init];
@@ -389,7 +392,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         
         [self p_configCustomViewContraints];
         [self p_configLabelConstraintsWithTopView:_customView];
-        [self p_configBgViewWithTopView:_customView bottomView:_label];
+        [self p_configContentViewWithTopView:_customView bottomView:_label];
         
     } else if (_mode == DMProgressHUDModeProgress) {
     
@@ -404,7 +407,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         
         [self p_configCustomViewContraints];
         [self p_configLabelConstraintsWithTopView:_customView];
-        [self p_configBgViewWithTopView:_customView bottomView:_label];
+        [self p_configContentViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeCustom) {
     
@@ -415,7 +418,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         
         [self p_configCustomViewContraints];
         [self p_configLabelConstraintsWithTopView:_customView];
-        [self p_configBgViewWithTopView:_customView bottomView:_label];
+        [self p_configContentViewWithTopView:_customView bottomView:_label];
     
     } else if (_mode == DMProgressHUDModeText) {
     
@@ -423,7 +426,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [_customView removeFromSuperview];
         
         [self p_configLabelConstraintsWithTopView:nil];
-        [self p_configBgViewWithTopView:_label bottomView:_label];
+        [self p_configContentViewWithTopView:_label bottomView:_label];
     }
 }
 
@@ -465,7 +468,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 // _vBackground's constraints
-- (void)p_configBgViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
+- (void)p_configContentViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
     
     // The maximum width and height allowed
     NSMutableArray *bgConstraints = [NSMutableArray new];

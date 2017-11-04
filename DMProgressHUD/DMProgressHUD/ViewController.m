@@ -63,6 +63,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin;
+    
     self.text = @"Here's info";
     
     UILabel *labStyle = [[UILabel alloc] initWithFrame:CGRectMake(20, 22, 0, 0)];
@@ -122,9 +124,9 @@
     [self.view addSubview:sgmMask];
     
     
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
-    self.tableView.frame = CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-200);
+    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(sgmMask.frame)+10, self.view.bounds.size.width, self.view.bounds.size.height-CGRectGetMaxY(sgmMask.frame)+10);
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];

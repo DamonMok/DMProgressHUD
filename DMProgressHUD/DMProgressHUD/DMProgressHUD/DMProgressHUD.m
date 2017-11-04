@@ -156,7 +156,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     // Background view
     self.vBackground = [[UIView alloc] init];
     self.vBackground.translatesAutoresizingMaskIntoConstraints = NO;
-    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.8];
+    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.85];
     self.vBackground.layer.cornerRadius = 5;
     self.vBackground.layer.masksToBounds = YES;
     _contentView = self.vBackground;
@@ -246,7 +246,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.labProgress.frame = CGRectMake(0, 0, rect.size.width, rect.size.height*0.5);
     self.labProgress.center = center;
     self.labProgress.text = [NSString stringWithFormat:@"%.0f%%", self.progress*100];
-    
 }
 
 #pragma mark - Show
@@ -299,7 +298,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [self.layer addAnimation:opacityAnimation forKey:nil];
         
     }
-    
 }
 
 #pragma mark - Dismiss
@@ -485,7 +483,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     // Centered vertically
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
-    
 }
 
 + (DMProgressHUD *)progressHUDForView:(UIView *)view {
@@ -564,7 +561,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self p_configConstraints];
 }
 
-
 // Custom view
 - (void)setCustomView:(UIView *)view width:(CGFloat)width height:(CGFloat)height {
 
@@ -577,7 +573,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self addSubview:_customView];
     
     [self p_configConstraints];
-    
 }
 
 - (void)setCustomView:(UIView *)customView {
@@ -599,7 +594,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         
         [self setNeedsDisplay];
     }
-    
 }
 
 // Limited width
@@ -709,14 +703,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (self.maskTapHandle) {
         self.maskTapHandle(self);
     }
-    
 }
 
-
+#pragma mark - Dealloc
 - (void)dealloc {
 
     [self.label removeObserver:self forKeyPath:@"text"];
-    NSLog(@"%s", __func__);
 }
 
 @end

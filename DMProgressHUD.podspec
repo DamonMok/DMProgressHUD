@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary      = "DMProgressHUD is a view that shows the progress."
 
   s.description  = <<-DESC
-                      DMProgressHUD is a view that shows the progress of a background thread's tasks.
+                      DMProgressHUD is a view that shows the progress of background thread's tasks.
                    DESC
 
   s.homepage     = "https://github.com/DamonMok/DMProgressHUD"

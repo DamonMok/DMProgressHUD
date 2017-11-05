@@ -126,7 +126,7 @@
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
-    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(sgmMask.frame)+10, self.view.bounds.size.width, self.view.bounds.size.height-CGRectGetMaxY(sgmMask.frame)+10);
+    self.tableView.frame = CGRectMake(0, CGRectGetMaxY(sgmMask.frame)+10, self.view.bounds.size.width, self.view.bounds.size.height-CGRectGetMaxY(sgmMask.frame)-10);
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];

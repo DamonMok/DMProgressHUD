@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DMProgressHUD"
-  s.version      = "0.0.2"
+  s.version      = "0.0.4"
   s.summary      = "DMProgressHUD is a view that shows the progress."
 
   s.description  = <<-DESC

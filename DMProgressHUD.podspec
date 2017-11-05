@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'DMProgressHUD/*' 
 
+  s.resources = "DMProgressHUD/DMProgressImgs.bundle"
+
   s.frameworks = 'Foundation', 'CoreGraphics', 'UIKit'  
 
 end

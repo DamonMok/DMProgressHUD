@@ -323,7 +323,7 @@
     DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeLoading;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -345,7 +345,7 @@
     hud.mode = DMProgressHUDModeLoading;
     hud.loadingType = DMProgressHUDLoadingTypeCircle;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -363,7 +363,7 @@
     DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeProgress;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -382,7 +382,7 @@
     hud.mode = DMProgressHUDModeProgress;
     hud.progressType = DMProgressHUDProgressTypeSector;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -402,7 +402,7 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeSuccess;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     [hud dismissAfter:1.0 completion:^{
         
@@ -416,7 +416,7 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeFail;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     [hud dismissAfter:1.0 completion:^{
         
@@ -430,7 +430,7 @@
     hud.mode = DMProgressHUDModeStatus;
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     [hud dismissAfter:1.0 completion:^{
         
@@ -443,7 +443,7 @@
     DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeText;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     
     [hud dismissAfter:1.0];
 }
@@ -453,7 +453,7 @@
     DMProgressHUD *hud = [DMProgressHUD showHUDAddedTo:self.view animation:_animation maskType:_mark];
     hud.mode = DMProgressHUDModeCustom;
     hud.style = _style;
-    hud.label.text = _text;
+    hud.text = _text;
     //custom
     UIView *customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"person"]];
     [hud setCustomView:customView width:180 height:180];

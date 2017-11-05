@@ -89,6 +89,11 @@ typedef void(^DMProgressHUDMaskTapHandle)(DMProgressHUD *hud);
 @property (nonatomic, assign) DMProgressHUDStatusType statusType;
 
 /**
+ * Set text info for HUD.
+ */
+@property (nonatomic, copy) NSString *text;
+
+/**
  * Text label.Set text/textColor/numberOfLines and so on.
  */
 @property (nonatomic, strong, readonly) UILabel *label;

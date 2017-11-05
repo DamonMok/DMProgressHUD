@@ -586,6 +586,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     _customView.translatesAutoresizingMaskIntoConstraints = NO;
 }
 
+- (void)setText:(NSString *)text {
+
+    _text = text;
+    
+    self.label.text = text;
+}
+
 - (void)setProgress:(CGFloat)progress {
     
     _progress = progress;

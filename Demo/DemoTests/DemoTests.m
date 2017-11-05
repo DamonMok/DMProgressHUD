@@ -1,18 +1,18 @@
 //
-//  DMProgressHUDTests.m
-//  DMProgressHUDTests
+//  DemoTests.m
+//  DemoTests
 //
-//  Created by Damon on 2017/10/23.
+//  Created by Damon on 2017/11/5.
 //  Copyright © 2017年 damon. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 
-@interface DMProgressHUDTests : XCTestCase
+@interface DemoTests : XCTestCase
 
 @end
 
-@implementation DMProgressHUDTests
+@implementation DemoTests
 
 - (void)setUp {
     [super setUp];

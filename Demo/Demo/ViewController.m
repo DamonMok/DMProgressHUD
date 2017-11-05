@@ -135,50 +135,50 @@
 
 #pragma mark - UISegmentedControl handle
 - (void)sementedControlClick:(UISegmentedControl *)sgm {
-
+    
     if (sgm == _sgmStyle) {
         
         if (sgm.selectedSegmentIndex == 0) {
             
             _style = DMProgressHUDStyleDark;
         } else if (sgm.selectedSegmentIndex == 1) {
-        
+            
             _style = DMProgressHUDStyleLight;
         }
         
     } else if (sgm == _sgmText) {
-    
+        
         if (sgm.selectedSegmentIndex == 0) {
             
             _text = @"Here's Info";
         } else if (sgm.selectedSegmentIndex == 1) {
-        
+            
             _text = @"";
         }
         
     } else if (sgm == _sgmAnimation) {
-    
+        
         if (sgm.selectedSegmentIndex == 0) {
             
             _animation = DMProgressHUDAnimationGradient;
         } else if (sgm.selectedSegmentIndex == 1) {
-        
+            
             _animation = DMProgressHUDAnimationIncrement;
         } else if (sgm.selectedSegmentIndex == 2) {
-        
+            
             _animation = DMProgressHUDAnimationSpring;
         }
         
     } else if (sgm == _sgmMask) {
-    
+        
         if (sgm.selectedSegmentIndex == 0) {
             
             _mark = DMProgressHUDMaskTypeNone;
         } else if (sgm.selectedSegmentIndex == 1) {
-        
+            
             _mark = DMProgressHUDMaskTypeClear;
         } else if (sgm.selectedSegmentIndex == 2) {
-        
+            
             _mark = DMProgressHUDMaskTypeGray;
         }
     }
@@ -431,7 +431,7 @@
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.style = _style;
     hud.text = _text;
-
+    
     [hud dismissAfter:1.0 completion:^{
         
         NSLog(@"complete");
@@ -474,7 +474,7 @@
     CGFloat progress = 0;
     
     while (progress < 1) {
-
+        
         progress += 0.01;
         dispatch_async(dispatch_get_main_queue(), ^{
             //refresh progress-value on main thread

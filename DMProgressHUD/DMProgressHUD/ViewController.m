@@ -431,7 +431,7 @@
     hud.statusType = DMProgressHUDStatusTypeWarning;
     hud.style = _style;
     hud.text = _text;
-    
+
     [hud dismissAfter:1.0 completion:^{
         
         NSLog(@"complete");

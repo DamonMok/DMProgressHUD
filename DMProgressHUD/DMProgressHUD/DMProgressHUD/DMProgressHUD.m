@@ -8,12 +8,11 @@
 
 #import "DMProgressHUD.h"
 
-static const CGFloat kMargin = 20.0;
+static const CGFloat kMargin = 20.0;    // The screen distance is greater than or equal to 20.f.
+static const CGFloat kMarginTop = 10.0;     // Distance between Image to Label.
 static const NSTimeInterval kAnimationDuration = 0.2;
 
 @interface DMProgressHUD ()<CAAnimationDelegate>
-
-@property (nonatomic, strong) UIView *vBackground;
 
 @property (nonatomic, strong) UIView *customView;
 
@@ -156,14 +155,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 // Set up all of the conponents
 - (void)p_configConponents {
     
-    // Background view
-    self.vBackground = [[UIView alloc] init];
-    self.vBackground.translatesAutoresizingMaskIntoConstraints = NO;
-    self.vBackground.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.85];
-    self.vBackground.layer.cornerRadius = 5;
-    self.vBackground.layer.masksToBounds = YES;
-    _contentView = self.vBackground;
-    [self addSubview:self.vBackground];
+    // Content view
+    _contentView = [[UIView alloc] init];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.contentView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.85];
+    self.contentView.layer.cornerRadius = 5;
+    self.contentView.layer.masksToBounds = YES;
+    [self addSubview:self.contentView];
     
     // Custom view
     _customView = nil;
@@ -297,7 +295,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         opacityAnimation.fromValue = @0;
         opacityAnimation.toValue = @1;
         
-        [self.vBackground.layer addAnimation:transformAnimation forKey:nil];
+        [self.contentView.layer addAnimation:transformAnimation forKey:nil];
         [self.layer addAnimation:opacityAnimation forKey:nil];
         
     }
@@ -357,7 +355,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         opacityAnimation.fromValue = @1;
         opacityAnimation.toValue = @0;
         
-        [self.vBackground.layer addAnimation:transformAnimation forKey:nil];
+        [self.contentView.layer addAnimation:transformAnimation forKey:nil];
         [self.layer addAnimation:opacityAnimation forKey:nil];
     }
 }
@@ -383,9 +381,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     if (_mode == DMProgressHUDModeLoading) {
         
-        [_vBackground addSubview:_customView];
-        [_vBackground addSubview:_label];
-        [_vBackground removeConstraints:_vBackground.constraints];
+        [_contentView addSubview:_customView];
+        [_contentView addSubview:_label];
+        [_contentView removeConstraints:_contentView.constraints];
         
         self.customWidth = 32;
         self.customHeight = self.customWidth;
@@ -400,7 +398,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [_customView.layer addSublayer:_layerCircle];
         [_customView.layer addSublayer:_layerProgress];
         [_customView.layer addSublayer:_labProgress.layer];
-        [_vBackground addSubview:_customView];
+        [_contentView addSubview:_customView];
         
         self.customWidth = 40;
         self.customHeight = self.customWidth;
@@ -411,9 +409,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     } else if (_mode == DMProgressHUDModeStatus || _mode == DMProgressHUDModeCustom) {
     
-        [_vBackground addSubview:_customView];
-        [_vBackground addSubview:_label];
-        [_vBackground removeConstraints:_vBackground.constraints];
+        [_contentView addSubview:_customView];
+        [_contentView addSubview:_label];
+        [_contentView removeConstraints:_contentView.constraints];
         [_customView removeConstraints:_customView.constraints];
         
         [self p_configCustomViewContraints];
@@ -422,7 +420,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     } else if (_mode == DMProgressHUDModeText) {
     
-        [_vBackground addSubview:_label];
+        [_contentView addSubview:_label];
         [_customView removeFromSuperview];
         
         [self p_configLabelConstraintsWithTopView:nil];
@@ -460,32 +458,32 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     // The margin between Label and topView
     if (topView) {
-        CGFloat marginTop = _label.text.length > 0 ? 10 : 0;
-        [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
+        CGFloat marginTop = _label.text.length > 0 ? kMarginTop : 0;
+        [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeBottom multiplier:1 constant:marginTop]];
     }
     
     [self addConstraints:cusViewConstraints];
 }
 
-// _vBackground's constraints
+// ContentView's constraints
 - (void)p_configContentViewWithTopView:(UIView *)topView bottomView:(UIView *)bottomView {
     
     // The maximum width and height allowed
     NSMutableArray *bgConstraints = [NSMutableArray new];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*kMargin]];
-    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*kMargin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:-2*kMargin]];
+    [bgConstraints addObject:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:-2*kMargin]];
     [self addConstraints:bgConstraints];
     
     // Get the wider subview
     UIView *maxWidthView = topView.bounds.size.width > bottomView.bounds.size.width ? topView : bottomView;
-    // Adaptive _vBackground based on topView and bottomView
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-_insets.top]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:_insets.bottom]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-_insets.left]];
-    [_vBackground addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeRight multiplier:1 constant:_insets.right]];
+    // Adaptive _contentView based on topView and bottomView
+    [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topView attribute:NSLayoutAttributeTop multiplier:1 constant:-_insets.top]];
+    [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bottomView attribute:NSLayoutAttributeBottom multiplier:1 constant:_insets.bottom]];
+    [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeLeft multiplier:1 constant:-_insets.left]];
+    [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:maxWidthView attribute:NSLayoutAttributeRight multiplier:1 constant:_insets.right]];
     
     // Centered vertically
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_vBackground attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_contentView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
 
 + (DMProgressHUD *)progressHUDForView:(UIView *)view {
@@ -634,7 +632,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     
     if (_style == DMProgressHUDStyleLight) {
     
-        self.vBackground.backgroundColor = [UIColor colorWithRed:234/255.0 green:237/255.0 blue:239/255.0 alpha:0.95];
+        self.contentView.backgroundColor = [UIColor colorWithRed:234/255.0 green:237/255.0 blue:239/255.0 alpha:0.95];
         self.label.textColor = [UIColor blackColor];
         
         if (_mode == DMProgressHUDModeLoading) {
@@ -698,7 +696,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             self.timer = nil;
         }
         
-        [self.vBackground.layer removeAllAnimations];
+        [self.contentView.layer removeAllAnimations];
         [self removeFromSuperview];
         
         if (_dismissCompletion) {

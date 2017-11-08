@@ -227,7 +227,7 @@ DMProgressHUD从设计层次的角度来看，其包含了5种展示模式：
 2. ***关于动画***：DMProgressHUD默认使用颜色渐变(alpha)动画进行显示/隐藏，另外还有增量式动画和弹性动画供使用者选择；
 3. ***关于遮盖***：DMProgressHUD默认不使用遮盖，另外提供透明遮盖和灰色遮盖供使用者选择；
 
-以上所列举关于DMProgressHUD的功能介绍，用户都可以 *运行Demo* 查看到相应的效果。除此之外，用户还可以对HUD的 *图文间距、颜色等* 进行自定义，可以在 *DMProgressHUD.h* 文件查看更多的API详细介绍。
+以上所列举关于DMProgressHUD的功能介绍，用户可以通过 *运行Demo* 查看到相应的效果。除此之外，用户还可以对HUD的 *图文间距、颜色等* 进行自定义，可以在 *DMProgressHUD.h* 文件查看更多的API详细介绍。
 
 联系方式(Email): damonmok1216@gmail.com。
 
